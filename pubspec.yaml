@@ -41,7 +41,6 @@ dependencies:
   expansion_widget: ^0.0.3
   equatable: ^2.0.5
   firebase_core: ^2.3.0
-  firebase_messaging: ^14.1.2
   flutter_dotenv: ^5.0.2
   flutter_native_splash: ^2.2.10+1
   flutter_riverpod: ^2.0.2
@@ -54,7 +53,6 @@ dependencies:
   json_annotation: ^4.6.0
   connectivity_plus: ^2.3.6+1
   http: ^0.13.5
-  webview_flutter: ^3.0.4
   retry: ^3.1.0
   store_redirect: ^2.0.1
   firebase_remote_config: ^3.0.6

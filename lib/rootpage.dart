@@ -1,23 +1,23 @@
-import 'package:dukka_finance/features/dashboard/dashboard.dart';
+import 'package:dukka_finance/features/auth/app/pages/auth_switch_screen.dart';
+import 'package:dukka_finance/features/auth/data/repository/auth_repository.dart';
 import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'configs/navigator.dart';
 import 'features/auth/app/pages/login_screen.dart';
 
-class RootPage extends StatefulWidget {
-  // final AuthCredential? cred;
+class RootPage extends ConsumerStatefulWidget {
   const RootPage({
     super.key,
-    // required this.cred,
   });
 
   @override
-  State<RootPage> createState() => _RootPageState();
+  ConsumerState<RootPage> createState() => _RootPageState();
 }
 
-class _RootPageState extends State<RootPage> {
+class _RootPageState extends ConsumerState<RootPage> {
   @override
   void initState() {
     super.initState();
@@ -28,9 +28,8 @@ class _RootPageState extends State<RootPage> {
     return Scaffold(
       body: Stack(
         children: [
-          StreamBuilder(
-            // initialData: widget.cred,
-            // stream: ,
+          StreamBuilder<User?>(
+            stream: ref.watch(authStateChangesProvider.stream),
             builder: (context, credSnapshot) {
               //This makes sure all screens are removed after
               //user is logged out.
@@ -42,15 +41,14 @@ class _RootPageState extends State<RootPage> {
                 });
               }
 
-              return const AnimatedSwitcher(
-                  duration: Duration(
-                    milliseconds: 500,
-                  ),
-                  child:
-                      // credSnapshot.hasData ?
-                      DebtorListPage()
-                  // : const LoginScreen(),
-                  );
+              return AnimatedSwitcher(
+                duration: const Duration(
+                  milliseconds: 500,
+                ),
+                child: credSnapshot.hasData
+                    ? const DebtorListPage()
+                    : const AuthSwitchScreen(),
+              );
             },
           ),
           // Consumer(

@@ -11,24 +11,14 @@ final authStateChangesProvider = StreamProvider<User?>(
     (ref) => ref.watch(_firebaseAuthProvider).authStateChanges());
 
 final authRepoProvider = Provider<AuthRepository>(
-  (ref) => AuthRepositoryImpl(ref),
+  (ref) => AuthRepository(ref),
 );
 
-abstract class AuthRepository {
-  Future<Either<Failure, UserCredential>> createUserWithEmailAndPassword(
-      AuthSignIn data);
-  Future<Either<Failure, UserCredential>> signInUserWithEmailAndPassword(
-      AuthSignIn data);
-
-  Stream<User?> authStream();
-}
-
-class AuthRepositoryImpl implements AuthRepository {
+class AuthRepository {
   final FirebaseAuth _firebaseAuth;
 
-  AuthRepositoryImpl(Ref ref) : _firebaseAuth = ref.read(_firebaseAuthProvider);
+  AuthRepository(Ref ref) : _firebaseAuth = ref.read(_firebaseAuthProvider);
 
-  @override
   Future<Either<Failure, UserCredential>> createUserWithEmailAndPassword(
       AuthSignIn data) async {
     return _firebaseAuth
@@ -41,8 +31,8 @@ class AuthRepositoryImpl implements AuthRepository {
     });
   }
 
-  @override
-  signInUserWithEmailAndPassword(AuthSignIn data) {
+  Future<Either<Failure, UserCredential>> signInUserWithEmailAndPassword(
+      AuthSignIn data) {
     return _firebaseAuth
         .signInWithEmailAndPassword(email: data.email, password: data.password)
         .then((value) => Right<Failure, UserCredential>(value))
@@ -52,7 +42,10 @@ class AuthRepositoryImpl implements AuthRepository {
     });
   }
 
-  @override
+  Future<void> signOut() {
+    return _firebaseAuth.signOut();
+  }
+
   Stream<User?> authStream() async* {
     yield* _firebaseAuth.authStateChanges();
   }

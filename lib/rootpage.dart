@@ -1,4 +1,5 @@
 import 'package:dukka_finance/features/dashboard/dashboard.dart';
+import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,14 +42,15 @@ class _RootPageState extends State<RootPage> {
                 });
               }
 
-              return AnimatedSwitcher(
-                duration: const Duration(
-                  milliseconds: 500,
-                ),
-                child: credSnapshot.hasData
-                    ? const DashboardScreen()
-                    : const LoginScreen(),
-              );
+              return const AnimatedSwitcher(
+                  duration: Duration(
+                    milliseconds: 500,
+                  ),
+                  child:
+                      // credSnapshot.hasData ?
+                      DebtorListPage()
+                  // : const LoginScreen(),
+                  );
             },
           ),
           // Consumer(

@@ -1,0 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final firebaseProvider = Provider((ref) => FirebaseFirestore.instance);
+
+class FirestoreDatabase {
+  FirestoreDatabase({required this.uid}) : assert(uid != null);
+  final String uid;
+}

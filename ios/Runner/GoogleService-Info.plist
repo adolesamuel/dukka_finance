@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>853152390971-5fnacijv0r2de6c22peul2196op8ntom.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.853152390971-5fnacijv0r2de6c22peul2196op8ntom</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDLBkrVH3bqC20jcIxcsM6T05Vlar5lzdg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>853152390971</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dukka-debt.app</string>
+	<key>PROJECT_ID</key>
+	<string>dukka-79528</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dukka-79528.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:853152390971:ios:9761c1064f1007a748e11e</string>
+</dict>
+</plist>

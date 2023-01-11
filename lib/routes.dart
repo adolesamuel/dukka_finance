@@ -7,6 +7,7 @@ const String homeRoute = '/home';
 
 class ScreenPaths {
   static const String loginScreen = '/login_screen';
+  static const String debtorsListScreen = '/debtors_screen';
 }
 
 Map<String, WidgetBuilder> routes(

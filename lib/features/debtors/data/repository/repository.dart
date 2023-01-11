@@ -1,49 +1,60 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dukka_finance/features/database/database.dart';
+import 'package:dartz/dartz.dart';
+import 'package:dukka_finance/core/failures/failure.dart';
 import 'package:dukka_finance/features/debtors/models/debtor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final debtorsRepository =
-    Provider<DebtorsRepository>((ref) => DebtorsRepositoryImpl(ref));
+    Provider<DebtorsRepository>((ref) => DebtorsRepositoryImpl());
 
-abstract class DebtorsRepository {
-  Stream<List<Debtor>> getListOfDebtors();
-}
+abstract class DebtorsRepository with DataBaseMethods<Debtor> {}
 
 class DebtorsRepositoryImpl implements DebtorsRepository {
-  final CollectionReference colRef;
+  final ref = FirebaseFirestore.instance.collection('debtors');
 
-  DebtorsRepositoryImpl(Ref ref)
-      : colRef = ref.read(firebaseProvider).collection('debtors');
+  DebtorsRepositoryImpl();
 
   @override
-  Stream<List<Debtor>> getListOfDebtors() {
-    // TODO: implement getListOfDebtors
+  Future<Either<Failure, bool>> addItem(Debtor t) {
+    return ref
+        .add(t.toJson())
+        .then((value) => const Right<Failure, bool>(true))
+        .catchError((error, stackTrace) =>
+            throw Left(CommonFailure('Add Error', error.toString())));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteItem(Debtor t) {
+    return ref
+        .doc(t.id)
+        .delete()
+        .then((value) => const Right<Failure, bool>(true))
+        .catchError((error, stack) =>
+            throw Left(CommonFailure('Delete Error', error.toString())));
+  }
+
+  @override
+  Stream<Either<Failure, List<Debtor>>> getStream() async* {
+    final data = ref.snapshots();
+    yield* data.map((snapshot) {
+      final result =
+          snapshot.docs.map((e) => Debtor.fromJson(e.data())).toList();
+
+      return Right<Failure, List<Debtor>>(result);
+    }).handleError((error, stack) =>
+        throw Left(CommonFailure('Error Stream', error.toString())));
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateItem(Debtor t) {
+    // TODO: implement updateItem
     throw UnimplementedError();
   }
 }
 
-// class DataRepository {
-//   // 1
-//   final CollectionReference collection =
-//       FirebaseFirestore.instance.collection('pets');
-//   // 2
-//   Stream<QuerySnapshot> getStream() {
-//     return collection.snapshots();
-//   }
-
-//   // 3
-//   Future<DocumentReference> addPet(Pet pet) {
-//     return collection.add(pet.toJson());
-//   }
-
-//   // 4
-//   void updatePet(Pet pet) async {
-//     await collection.doc(pet.referenceId).update(pet.toJson());
-//   }
-
-//   // 5
-//   void deletePet(Pet pet) async {
-//     await collection.doc(pet.referenceId).delete();
-//   }
-// }
+mixin DataBaseMethods<T> {
+  Stream<Either<Failure, List<T>>> getStream();
+  Future<Either<Failure, bool>> addItem(T t);
+  Future<Either<Failure, bool>> updateItem(T t);
+  Future<Either<Failure, bool>> deleteItem(T t);
+}

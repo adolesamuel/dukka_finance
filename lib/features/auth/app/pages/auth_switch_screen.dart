@@ -1,7 +1,8 @@
+import 'package:dukka_finance/configs/navigator.dart';
 import 'package:dukka_finance/constants/asset_strings.dart';
-import 'package:dukka_finance/features/auth/app/pages/login_screen.dart';
 import 'package:dukka_finance/features/common/button_widget.dart';
 import 'package:dukka_finance/features/common/looping_video_widget.dart';
+import 'package:dukka_finance/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -63,7 +64,9 @@ class _AuthSwitchScreenState extends State<AuthSwitchScreen> {
                   ),
                   const Spacer(),
                   AppButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      navigateName(context, ScreenPaths.loginScreen);
+                    },
                     text: 'Sign In',
                   ),
                   const Spacer(),

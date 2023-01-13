@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 ThemeData theme() {
   return ThemeData(
-    // scaffoldBackgroundColor: AppColors.scaffoldBackground,
+    scaffoldBackgroundColor: Colors.white,
     primarySwatch: const MaterialColor(
       0xFF48A2D6,
       {

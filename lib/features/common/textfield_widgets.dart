@@ -94,7 +94,7 @@ class TextFieldUnderline extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                       filled: true,
-                      fillColor: fillColor ?? Colors.white,
+                      fillColor: fillColor,
                       border: UnderlineInputBorder(
                           borderRadius: BorderRadius.circular(0.0),
                           borderSide: BorderSide(

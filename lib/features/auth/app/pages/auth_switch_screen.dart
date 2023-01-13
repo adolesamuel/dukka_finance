@@ -71,7 +71,9 @@ class _AuthSwitchScreenState extends State<AuthSwitchScreen> {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      navigateName(context, ScreenPaths.signUpScreen);
+                    },
                     child: const Text(
                       'Create account',
                       style: TextStyle(fontSize: 18.0),

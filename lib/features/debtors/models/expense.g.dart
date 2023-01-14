@@ -7,6 +7,7 @@ part of 'expense.dart';
 // **************************************************************************
 
 Expense _$ExpenseFromJson(Map<String, dynamic> json) => Expense(
+      id: json['id'] as String,
       name: json['name'] as String,
       date: DateTime.parse(json['date'] as String),
       amount: (json['amount'] as num).toDouble(),
@@ -16,6 +17,7 @@ Expense _$ExpenseFromJson(Map<String, dynamic> json) => Expense(
     );
 
 Map<String, dynamic> _$ExpenseToJson(Expense instance) => <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'sender': instance.sender,
       'receiver': instance.receiver,

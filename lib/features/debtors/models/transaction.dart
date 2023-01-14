@@ -1,4 +1,10 @@
-abstract class Transaction {
+import 'package:json_annotation/json_annotation.dart';
+
+part 'transaction.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class Transaction {
+  final String id;
   final String name;
   final String sender;
   final String receiver;
@@ -8,6 +14,7 @@ abstract class Transaction {
   final String description;
 
   Transaction({
+    required this.id,
     required this.name,
     required this.type,
     required this.date,
@@ -16,6 +23,11 @@ abstract class Transaction {
     required this.sender,
     required this.receiver,
   });
+
+  factory Transaction.fromJson(Map<String, dynamic> json) =>
+      _$TransactionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TransactionToJson(this);
 }
 
 enum TransactionType {

@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'debt.dart';
+part of 'transaction.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Debt _$DebtFromJson(Map<String, dynamic> json) => Debt(
+Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
       id: json['id'] as String,
       name: json['name'] as String,
       type: $enumDecode(_$TransactionTypeEnumMap, json['type']),
@@ -15,11 +15,10 @@ Debt _$DebtFromJson(Map<String, dynamic> json) => Debt(
       description: json['description'] as String,
       sender: json['sender'] as String,
       receiver: json['receiver'] as String,
-      dueDate: DateTime.parse(json['due_date'] as String),
-      isPaid: json['is_paid'] as bool,
     );
 
-Map<String, dynamic> _$DebtToJson(Debt instance) => <String, dynamic>{
+Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'sender': instance.sender,
@@ -28,8 +27,6 @@ Map<String, dynamic> _$DebtToJson(Debt instance) => <String, dynamic>{
       'date': instance.date.toIso8601String(),
       'amount': instance.amount,
       'description': instance.description,
-      'due_date': instance.dueDate.toIso8601String(),
-      'is_paid': instance.isPaid,
     };
 
 const _$TransactionTypeEnumMap = {

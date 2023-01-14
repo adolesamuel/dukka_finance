@@ -9,6 +9,7 @@ class Debt extends Transaction {
   final bool isPaid;
 
   Debt({
+    required super.id,
     required super.name,
     required super.type,
     required super.date,

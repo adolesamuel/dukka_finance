@@ -6,7 +6,8 @@ part 'expense.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Expense extends Transaction {
   Expense(
-      {required super.name,
+      {required super.id,
+      required super.name,
       required super.date,
       required super.amount,
       required super.description,

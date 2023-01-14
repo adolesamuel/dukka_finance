@@ -6,7 +6,8 @@ part 'income.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Income extends Transaction {
   Income(
-      {required super.name,
+      {required super.id,
+      required super.name,
       required super.date,
       required super.amount,
       required super.description,

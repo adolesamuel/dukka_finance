@@ -67,9 +67,9 @@ class ServiceRunner<Failure, T> {
         if (e.toString().contains('token_not_valid')) {
           //We're doing nothing when token is not valid.
         }
-        return Left(
-            CommonFailure(errorTitle, e.toString().replaceAll('Exception:', ''))
-                as Failure);
+        return Left(CommonFailure(
+                errorTitle, e.toString().replaceAll(RegExp(r'(\[.*\])'), ''))
+            as Failure);
       }
     } else {
       //no network Connection

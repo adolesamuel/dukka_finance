@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppButton extends StatelessWidget {
-  final Function()? onPressed;
+  final void Function()? onPressed;
   final String? text;
   final double? height;
   final double? width;

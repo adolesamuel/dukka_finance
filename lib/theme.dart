@@ -5,7 +5,7 @@ ThemeData theme() {
   return ThemeData(
     scaffoldBackgroundColor: Colors.white,
     primarySwatch: const MaterialColor(
-      0xFF48A2D6,
+      AppColors.appThemeColor,
       {
         50: Color.fromRGBO(72, 162, 214, .1),
         100: Color.fromRGBO(72, 162, 214, .2),

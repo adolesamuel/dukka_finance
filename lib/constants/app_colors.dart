@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const appThemeColor = 0xFF48A2D6;
   static const authScaffoldBgColor = Color(0xFF17223C);
   static const authAppBarBgColor = Color(0xFF17223C);
   static const authFontColor = Colors.white;

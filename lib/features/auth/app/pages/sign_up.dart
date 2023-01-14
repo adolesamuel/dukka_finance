@@ -36,9 +36,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool isNewPasswordHidden = true;
   bool isConfirmPasswordHidden = true;
 
-  bool isDataComplete() => _formKey.currentState?.validate() ?? false;
-
-  _handleSignup() {
+  void _handleSignup() {
     if (_formKey.currentState!.validate()) {
       ref.read(authStateProvider.notifier).createPassword(
           email: emailTextController.text,
@@ -154,17 +152,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           color: AppColors.authFontColor,
                         ),
                 ),
-                onEditingComplete: () {
-                  _handleSignup();
-                },
+                onEditingComplete: _handleSignup,
               ),
               if (authState is CreatePasswordLoadingState)
                 const LoadingWidget()
               else
                 AppButton(
-                  onPressed: () {
-                    _handleSignup();
-                  },
+                  onPressed: _handleSignup,
                   text: 'Submit',
                 )
             ],

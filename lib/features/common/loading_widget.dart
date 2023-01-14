@@ -1,3 +1,4 @@
+import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
@@ -8,9 +9,12 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-      height: 50.0,
-      width: 50.0,
-      child: CircularProgressIndicator.adaptive(),
+      height: 40.0,
+      width: 40.0,
+      child: CircularProgressIndicator.adaptive(
+        strokeWidth: 1.0,
+        backgroundColor: Color(AppColors.appThemeColor),
+      ),
     );
   }
 }

@@ -36,7 +36,11 @@ class Throttler {
   }
 }
 
-String? validator(String? value, Validator field) {
+String? validator(
+  String? value,
+  Validator field, {
+  String? passwordText,
+}) {
   if (value!.trim().isEmpty) {
     return "$field cannot be empty";
   } else if (field == Validator.email &&
@@ -48,6 +52,9 @@ String? validator(String? value, Validator field) {
     return "$field isn't valid";
   } else if (field == Validator.password && !(value.length > 4)) {
     return "$field isn't long enough";
+  } else if (field == Validator.confirmPassword &&
+      (value.trim() != passwordText?.trim())) {
+    return "Passwords aren't the same";
   } else {
     return null;
   }

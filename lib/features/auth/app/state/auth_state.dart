@@ -1,5 +1,5 @@
 import 'package:dukka_finance/core/failures/failure.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 
 class AuthState {}
 
@@ -14,7 +14,7 @@ class LogInFailureState extends AuthState {
 }
 
 class LogInSuccessState extends AuthState {
-  final UserCredential authCredential;
+  final AppUser authCredential;
 
   LogInSuccessState(this.authCredential);
 }
@@ -28,7 +28,7 @@ class CreatePasswordFailureState extends AuthState {
 }
 
 class CreatePasswordSuccessState extends AuthState {
-  final UserCredential status;
+  final AppUser status;
 
   CreatePasswordSuccessState(this.status);
 }

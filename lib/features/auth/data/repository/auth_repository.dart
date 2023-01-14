@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/core/failures/failure.dart';
 import 'package:dukka_finance/core/network_info/network_info.dart';
 import 'package:dukka_finance/core/runner/service.dart';
+import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/auth/data/models/auth_signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,8 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final _firebaseAuthProvider =
     Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
 
-final authStateChangesProvider = StreamProvider<User?>(
-    (ref) => ref.watch(_firebaseAuthProvider).authStateChanges());
+final authStateChangesProvider = StreamProvider<AppUser?>(
+    (ref) => ref.watch(_firebaseAuthProvider).authStateChanges().map((event) {
+          if (event == null) return null;
+          return AppUser.fromFirebaseUser(event);
+        }));
 
 final authRepoProvider = Provider<AuthRepository>(
   (ref) => AuthRepository(ref),
@@ -24,23 +28,27 @@ class AuthRepository {
       : _firebaseAuth = ref.read(_firebaseAuthProvider),
         _networkInfo = ref.read(networkInfoProvider);
 
-  Future<Either<Failure, UserCredential>> createUserWithEmailAndPassword(
+  Future<Either<Failure, AppUser>> createUserWithEmailAndPassword(
       AuthSignIn data) async {
-    ServiceRunner<Failure, UserCredential> sR = ServiceRunner(_networkInfo);
+    ServiceRunner<Failure, AppUser> sR = ServiceRunner(_networkInfo);
 
     return sR.tryRemoteandCatch(
-        call: _firebaseAuth.createUserWithEmailAndPassword(
-            email: data.email, password: data.password),
+        call: _firebaseAuth
+            .createUserWithEmailAndPassword(
+                email: data.email, password: data.password)
+            .then((value) => AppUser.fromFirebaseUser(value.user!)),
         errorTitle: 'SignUp Failure');
   }
 
-  Future<Either<Failure, UserCredential>> signInUserWithEmailAndPassword(
+  Future<Either<Failure, AppUser>> signInUserWithEmailAndPassword(
       AuthSignIn data) async {
-    ServiceRunner<Failure, UserCredential> sR = ServiceRunner(_networkInfo);
+    ServiceRunner<Failure, AppUser> sR = ServiceRunner(_networkInfo);
 
     return sR.tryRemoteandCatch(
-        call: _firebaseAuth.signInWithEmailAndPassword(
-            email: data.email, password: data.password),
+        call: _firebaseAuth
+            .signInWithEmailAndPassword(
+                email: data.email, password: data.password)
+            .then((value) => AppUser.fromFirebaseUser(value.user!)),
         errorTitle: 'SignIn Failure');
   }
 
@@ -48,7 +56,12 @@ class AuthRepository {
     return _firebaseAuth.signOut();
   }
 
-  Stream<User?> authStream() async* {
-    yield* _firebaseAuth.authStateChanges();
+  Stream<AppUser?> authStream() async* {
+    yield* _firebaseAuth.authStateChanges().map((event) {
+      if (event == null) {
+        return null;
+      }
+      return AppUser.fromFirebaseUser(event);
+    });
   }
 }

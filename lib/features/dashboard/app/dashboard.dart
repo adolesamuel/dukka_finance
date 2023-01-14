@@ -1,9 +1,13 @@
 //Show recently added debts
 //show next due debts
 
+import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/common/profile_icon.dart';
 import 'package:dukka_finance/features/common/search_icon.dart';
+import 'package:dukka_finance/features/services/app_user_manager.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -93,29 +97,35 @@ class _DashboardContentState extends State<DashboardContent>
   @override
   bool get wantKeepAlive => true;
 
+  AppUser user = AppUserManager.user;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return SizedBox.expand(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        const Text('Current Balance'),
-        //add Upcoming Debt Tracker.
-        const Text(
-          '10000.00',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 50,
-            itemBuilder: (context, index) => const ListTile(
-              title: Text('Expense'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text('Current Balance'),
+          Text(user.fullName),
+          //add Upcoming Debt Tracker.
+          const Text(
+            '10000.00',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-      ]),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 50,
+              itemBuilder: (context, index) => const ListTile(
+                title: Text('Expense'),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

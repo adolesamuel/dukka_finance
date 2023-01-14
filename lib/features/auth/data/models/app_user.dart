@@ -5,15 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AppUser {
   final String email;
   final String uid;
-  final String? fullName;
+  final String fullName;
 
-  AppUser(this.email, this.uid, {this.fullName});
+  AppUser(this.email, this.uid, this.fullName);
 
-  factory AppUser.fromFirebaseUser(User user, {String? fullName}) {
+  factory AppUser.fromFirebaseUser(User user) {
     return AppUser(
       user.email ?? '',
       user.uid,
-      fullName: fullName,
+      user.displayName ?? '',
     );
   }
 }

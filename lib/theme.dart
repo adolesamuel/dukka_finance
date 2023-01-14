@@ -1,3 +1,4 @@
+import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 ThemeData theme() {
@@ -64,8 +65,9 @@ ThemeData theme() {
             )),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-          // disabledBackgroundColor: AppColors.disabledBtnColor,
-          ),
+        disabledBackgroundColor: AppColors.disabledBtnColor,
+        disabledForegroundColor: AppColors.disableBtnFontColor,
+      ),
     ),
   );
 }

@@ -1,5 +1,6 @@
 import 'package:dukka_finance/features/auth/app/pages/auth_switch_screen.dart';
 import 'package:dukka_finance/features/auth/data/repository/auth_repository.dart';
+import 'package:dukka_finance/features/dashboard/dashboard.dart';
 import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _RootPageState extends ConsumerState<RootPage> {
                   milliseconds: 500,
                 ),
                 child: credSnapshot.hasData
-                    ? const DebtorListPage()
+                    ? const DashboardScreen()
                     : const AuthSwitchScreen(),
               );
             },

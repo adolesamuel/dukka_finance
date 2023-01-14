@@ -19,7 +19,7 @@ ThemeData theme() {
         900: Color.fromRGBO(72, 162, 214, 1),
       },
     ),
-    primaryColor: const Color(0xFF000A80),
+    primaryColor: const Color(AppColors.appThemeColor),
     iconTheme: const IconThemeData(color: Colors.black, size: 24),
     backgroundColor: Colors.white,
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
@@ -55,7 +55,8 @@ ThemeData theme() {
           color: Colors.black,
         )),
     appBarTheme: const AppBarTheme(
-      // backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
       elevation: 0,
       // foregroundColor: AppColors.headerTextColor,
     ),

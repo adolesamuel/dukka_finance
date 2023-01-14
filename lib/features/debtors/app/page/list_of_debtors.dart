@@ -1,5 +1,8 @@
+import 'package:dukka_finance/features/auth/app/state/auth_state_notifier.dart';
+import 'package:dukka_finance/features/common/button_widget.dart';
 import 'package:dukka_finance/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DebtorListPage extends StatefulWidget {
   static const route = ScreenPaths.debtorsListScreen;
@@ -21,6 +24,17 @@ class _DebtorListPageState extends State<DebtorListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Consumer(builder: (context, ref, child) {
+      return Scaffold(
+        body: Center(
+          child: AppButton(
+            onPressed: () {
+              ref.read(authStateProvider.notifier).signOut();
+            },
+            text: 'Sign Out',
+          ),
+        ),
+      );
+    });
   }
 }

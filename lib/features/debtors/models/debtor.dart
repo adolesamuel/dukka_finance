@@ -1,3 +1,4 @@
+import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'debtor.g.dart';
@@ -10,7 +11,7 @@ class Debtor {
   final String paymentDueDate;
   final String email;
   final String phoneNumber;
-  final double debtAmount;
+  final List<Debt> debts;
   final double amountPaid;
   final String lastContactDate;
   final double isPaymentComplete;
@@ -22,7 +23,7 @@ class Debtor {
     required this.paymentDueDate,
     required this.email,
     required this.phoneNumber,
-    required this.debtAmount,
+    required this.debts,
     required this.amountPaid,
     required this.lastContactDate,
     required this.isPaymentComplete,

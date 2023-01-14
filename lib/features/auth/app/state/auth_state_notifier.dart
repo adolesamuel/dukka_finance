@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authStateProvider =
-    StateNotifierProvider(((ref) => AuthStateNotifier(ref)));
+    StateNotifierProvider.autoDispose(((ref) => AuthStateNotifier(ref)));
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository _authRepository;
@@ -42,5 +42,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       (l) => CreatePasswordFailureState(l),
       (r) => CreatePasswordSuccessState(r),
     );
+  }
+
+  Future<void> signOut() async {
+    await _authRepository.signOut();
   }
 }

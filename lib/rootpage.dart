@@ -36,9 +36,9 @@ class _RootPageState extends ConsumerState<RootPage> {
               if (credSnapshot.data == null) {
                 //Pop all possible logged in pages if
                 //no user exists
-                // Future.delayed(const Duration(milliseconds: 300), () {
-                //   recursivePopAll(context);
-                // });
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  recursivePopAll(context);
+                });
               }
 
               return AnimatedSwitcher(

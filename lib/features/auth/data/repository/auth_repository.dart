@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/core/failures/failure.dart';
+import 'package:dukka_finance/core/network_info/network_info.dart';
+import 'package:dukka_finance/core/runner/service.dart';
 import 'package:dukka_finance/features/auth/data/models/auth_signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,30 +18,30 @@ final authRepoProvider = Provider<AuthRepository>(
 
 class AuthRepository {
   final FirebaseAuth _firebaseAuth;
+  final NetworkInfo _networkInfo;
 
-  AuthRepository(Ref ref) : _firebaseAuth = ref.read(_firebaseAuthProvider);
+  AuthRepository(Ref ref)
+      : _firebaseAuth = ref.read(_firebaseAuthProvider),
+        _networkInfo = ref.read(networkInfoProvider);
 
   Future<Either<Failure, UserCredential>> createUserWithEmailAndPassword(
       AuthSignIn data) async {
-    return _firebaseAuth
-        .createUserWithEmailAndPassword(
-            email: data.email, password: data.password)
-        .then((value) => Right<Failure, UserCredential>(value))
-        .onError((error, stackTrace) {
-      final failure = CommonFailure('SignUp Failure', error.toString());
-      throw Left(failure);
-    });
+    ServiceRunner<Failure, UserCredential> sR = ServiceRunner(_networkInfo);
+
+    return sR.tryRemoteandCatch(
+        call: _firebaseAuth.createUserWithEmailAndPassword(
+            email: data.email, password: data.password),
+        errorTitle: 'SignUp Failure');
   }
 
   Future<Either<Failure, UserCredential>> signInUserWithEmailAndPassword(
-      AuthSignIn data) {
-    return _firebaseAuth
-        .signInWithEmailAndPassword(email: data.email, password: data.password)
-        .then((value) => Right<Failure, UserCredential>(value))
-        .onError((error, stackTrace) {
-      final failure = CommonFailure('SignIn Failure', error.toString());
-      throw Left(failure);
-    });
+      AuthSignIn data) async {
+    ServiceRunner<Failure, UserCredential> sR = ServiceRunner(_networkInfo);
+
+    return sR.tryRemoteandCatch(
+        call: _firebaseAuth.signInWithEmailAndPassword(
+            email: data.email, password: data.password),
+        errorTitle: 'SignIn Failure');
   }
 
   Future<void> signOut() {

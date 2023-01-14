@@ -1,13 +1,7 @@
-//Show recently added debts
-//show next due debts
-
-import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/common/profile_icon.dart';
 import 'package:dukka_finance/features/common/search_icon.dart';
-import 'package:dukka_finance/features/services/app_user_manager.dart';
+import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -77,53 +71,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: 'Debts'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
-        ],
-      ),
-    );
-  }
-}
-
-class DashboardContent extends StatefulWidget {
-  const DashboardContent({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<DashboardContent> createState() => _DashboardContentState();
-}
-
-class _DashboardContentState extends State<DashboardContent>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  AppUser user = AppUserManager.user;
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return SizedBox.expand(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('Current Balance'),
-          Text(user.fullName),
-          //add Upcoming Debt Tracker.
-          const Text(
-            '10000.00',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 50,
-              itemBuilder: (context, index) => const ListTile(
-                title: Text('Expense'),
-              ),
-            ),
-          ),
         ],
       ),
     );

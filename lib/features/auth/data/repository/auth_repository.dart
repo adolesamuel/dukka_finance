@@ -11,10 +11,13 @@ final _firebaseAuthProvider =
     Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
 
 final authStateChangesProvider = StreamProvider<AppUser?>(
-    (ref) => ref.watch(_firebaseAuthProvider).authStateChanges().map((event) {
-          if (event == null) return null;
-          return AppUser.fromFirebaseUser(event);
-        }));
+  (ref) => ref.watch(_firebaseAuthProvider).authStateChanges().map(
+    (event) {
+      if (event == null) return null;
+      return AppUser.fromFirebaseUser(event);
+    },
+  ),
+);
 
 final authRepoProvider = Provider<AuthRepository>(
   (ref) => AuthRepository(ref),

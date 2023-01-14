@@ -1,34 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dukka_finance/features/services/app_user_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FirestorePath {
   static String dashboardData(String uid) => 'dashboard/$uid';
 }
 
-class AppDataBase {
-  AppDataBase._();
-  static final instance = AppDataBase._();
-  //
-  String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
-  String email = FirebaseAuth.instance.currentUser?.email ?? '';
-  String fullName = FirebaseAuth.instance.currentUser?.displayName ?? '';
-  FirebaseFirestore ref = FirebaseFirestore.instance;
+final appDatabaseProvider =
+    Provider.autoDispose<AppDataBase>((ref) => AppDataBase());
 
-  Future<void> createDashBoard() async {
-    print("uid: $uid");
+class AppDataBase {
+  AppDataBase();
+  final FirebaseFirestore ref = FirebaseFirestore.instance;
+
+  Future<void> createDashBoard(AppUser user) async {
+    print("uid: ${user.uid}");
     final emptyDashboard = DashboardData(
-      id: uid,
+      id: user.uid,
       balance: 0.0,
-      email: email,
-      fullName: fullName,
+      email: user.email,
+      fullName: user.fullName,
     );
-    ref.doc(FirestorePath.dashboardData(uid)).set(emptyDashboard.toJson());
+    ref.doc(FirestorePath.dashboardData(user.uid)).set(emptyDashboard.toJson());
   }
 
-  Stream<Map<String, dynamic>?> streamDashBoardData() async* {
+  Stream<Map<String, dynamic>?> streamDashBoardData(AppUser user) async* {
+    print(user.fullName);
     yield* ref
-        .doc(FirestorePath.dashboardData(uid))
+        .doc(FirestorePath.dashboardData(user.uid))
         .snapshots()
         .map((snapshot) => snapshot.data());
   }

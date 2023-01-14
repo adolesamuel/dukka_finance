@@ -7,28 +7,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/failures/failure.dart';
 
 final dashboardRepoProvider =
-    Provider<DashboardRepository>((ref) => DashboardRepositoryImpl());
+    Provider<DashboardRepository>((ref) => DashboardRepositoryImpl(ref));
 
 abstract class DashboardRepository {
   ///A dashboard is created for user on create account.
-  Future<void> createDashBoard(AppUser user);
-  Stream<Either<Failure, DashboardData>> streamDashBoardData();
+  Stream<Either<Failure, DashboardData>> streamDashBoardData(AppUser user);
 }
 
 //
 class DashboardRepositoryImpl implements DashboardRepository {
-  final database = AppDataBase.instance;
+  final AppDataBase database;
+
+  DashboardRepositoryImpl(Ref ref) : database = ref.read(appDatabaseProvider);
 
   @override
-  Future<void> createDashBoard(AppUser firebaseUser) async {
-    // database.createUserData('test user');
-  }
-
-  @override
-  Stream<Either<Failure, DashboardData>> streamDashBoardData() async* {
-    yield* database.streamDashBoardData().map((event) {
+  Stream<Either<Failure, DashboardData>> streamDashBoardData(
+      AppUser user) async* {
+    yield* database.streamDashBoardData(user).map((event) {
       if (event == null) {
-        database.createDashBoard();
+        database.createDashBoard(user);
       }
       return Right<Failure, DashboardData>(DashboardData.fromJson(event!));
     }).handleError((error, stack) {

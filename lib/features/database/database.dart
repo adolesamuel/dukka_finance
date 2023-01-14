@@ -1,120 +1,48 @@
-// final firebaseProvider = Provider((ref) => FirebaseFirestore.instance);
-
-// final databaseProvider = Provider<Database?>((ref) {
-//   final auth = ref.watch(authStateChangesProvider);
-//   final dat = ref.read(firebaseProvider);
-
-//   // we only have a valid DB if the user is signed in
-//   if (auth.value?.uid != null) {
-//     return Database(uid: auth.value!.uid, firestoreDatabase: dat);
-//   }
-//   // else we return null
-//   return null;
-// });
-
-// class Database {
-//   Database({
-//     required this.uid,
-//     required this.firestoreDatabase,
-//   });
-//   final String uid;
-//   final FirebaseFirestore firestoreDatabase;
-
-//   CollectionReference<Map<String, dynamic>> collection(String collectionPath) {
-//     return firestoreDatabase.collection(collectionPath);
-//   }
-// }
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class FirestoreDataSource {
-  const FirestoreDataSource._();
-
-  Future<void> setData({
-    required String path,
-    required Map<String, dynamic> data,
-    bool merge = false,
-  }) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    await reference.set(data, SetOptions(merge: merge));
-  }
-
-  Future<void> deleteData({required String path}) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    await reference.delete();
-  }
-
-  // watch collections and documents as streams
-  Stream<List<T>> watchCollection<T>({
-    required String path,
-    required T Function(Map<String, dynamic>? data, String documentID) builder,
-    Query<Map<String, dynamic>>? Function(Query<Map<String, dynamic>> query)?
-        queryBuilder,
-    int Function(T lhs, T rhs)? sort,
-  }) {
-    Query<Map<String, dynamic>> query =
-        FirebaseFirestore.instance.collection(path);
-    if (queryBuilder != null) {
-      query = queryBuilder(query)!;
-    }
-    final snapshots = query.snapshots();
-    return snapshots.map((snapshot) {
-      final result = snapshot.docs
-          .map((snapshot) => builder(snapshot.data(), snapshot.id))
-          .where((value) => value != null)
-          .toList();
-      if (sort != null) {
-        result.sort(sort);
-      }
-      return result;
-    });
-  }
-
-  Stream<T> watchDocument<T>({
-    required String path,
-    required T Function(Map<String, dynamic>? data, String documentID) builder,
-  }) {
-    final reference = FirebaseFirestore.instance.doc(path);
-    final Stream<DocumentSnapshot<Map<String, dynamic>>> snapshots =
-        reference.snapshots();
-    return snapshots.map((snapshot) => builder(snapshot.data(), snapshot.id));
-  }
-
-  // fetch collections and documents as futures
-  Future<List<T>> fetchCollection<T>({
-    required String path,
-    required T Function(Map<String, dynamic>? data, String documentID) builder,
-    Query<Map<String, dynamic>>? Function(Query<Map<String, dynamic>> query)?
-        queryBuilder,
-    int Function(T lhs, T rhs)? sort,
-  }) async {
-    Query<Map<String, dynamic>> query =
-        FirebaseFirestore.instance.collection(path);
-    if (queryBuilder != null) {
-      query = queryBuilder(query)!;
-    }
-    final snapshot = await query.get();
-    final result = snapshot.docs
-        .map((snapshot) => builder(snapshot.data(), snapshot.id))
-        .where((value) => value != null)
-        .toList();
-    if (sort != null) {
-      result.sort(sort);
-    }
-    return result;
-  }
-
-  Future<T> fetchDocument<T>({
-    required String path,
-    required T Function(Map<String, dynamic>? data, String documentID) builder,
-  }) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    final snapshot = await reference.get();
-    return builder(snapshot.data(), snapshot.id);
-  }
+class FirestorePath {
+  static String setUserData() => 'users';
+  static String getUserData(String uid) => 'users/$uid';
+  static String dashboardData(String uid) => 'dashboard/$uid';
+  static String setDashboardData(String uid) => 'dashboard/$uid';
 }
 
-final firestoreDataSourceProvider = Provider<FirestoreDataSource>((ref) {
-  return const FirestoreDataSource._();
-});
+class AppDataBase {
+  AppDataBase._();
+  static final instance = AppDataBase._();
+  //
+  String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+  String email = FirebaseAuth.instance.currentUser?.email ?? '';
+  FirebaseFirestore ref = FirebaseFirestore.instance;
+
+  Future<Map<String, dynamic>?> getUserData() async {
+    return await ref
+        .doc(FirestorePath.getUserData(uid))
+        .get()
+        .then((value) => value.data());
+  }
+
+  Future<void> createUserData(String fullName, String id) async {
+    ref.doc(FirestorePath.getUserData(id)).set({'full_name': fullName});
+  }
+
+  Future<void> createDashBoard() async {
+    final fullName = (await getUserData())?['full_name'] ?? '';
+    final emptyDashboard = DashboardData(
+      id: uid,
+      balance: 0.0,
+      email: email,
+      fullName: fullName,
+    );
+    ref.doc(FirestorePath.dashboardData(uid)).set(emptyDashboard.toJson());
+  }
+
+  Stream<Map<String, dynamic>?> streamDashBoardData() async* {
+    yield* ref
+        .doc(FirestorePath.dashboardData(uid))
+        .snapshots()
+        .map((snapshot) => snapshot.data());
+  }
+}

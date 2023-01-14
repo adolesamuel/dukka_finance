@@ -30,10 +30,12 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> createPassword(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      String? fullName}) async {
     state = CreatePasswordLoadingState();
 
-    final AuthSignIn loginItem = AuthSignIn(email, password);
+    final AuthSignUp loginItem = AuthSignUp(email, password, fullName ?? '');
 
     final createPasswordOrError =
         await _authRepository.createUserWithEmailAndPassword(loginItem);

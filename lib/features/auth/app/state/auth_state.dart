@@ -32,3 +32,11 @@ class CreatePasswordSuccessState extends AuthState {
 
   CreatePasswordSuccessState(this.status);
 }
+
+class LogOutLoading extends AuthState {}
+
+class LogOutDone extends AuthState {
+  final bool status;
+
+  LogOutDone(this.status);
+}

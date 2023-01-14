@@ -45,6 +45,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> signOut() async {
+    state = LogOutLoading();
     await _authRepository.signOut();
+
+    state = LogOutDone(true);
   }
 }

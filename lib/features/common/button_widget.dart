@@ -28,25 +28,22 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
-              //Elevation based on states
-              elevation: MaterialStateProperty.resolveWith<double>((states) {
-                if (states.contains(MaterialState.pressed)) {
-                  return 0;
-                }
-                return 4;
-              }),
-              //Border
-              shape:
-                  MaterialStateProperty.resolveWith<OutlinedBorder?>((states) {
-                return RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(borderRadius ?? 12.0));
-              }),
-              backgroundColor: color != null
-                  ? MaterialStateProperty.resolveWith<Color>((states) => color!)
-                  : null),
+            //Elevation based on states
+            elevation: MaterialStateProperty.resolveWith<double>((states) {
+              if (states.contains(MaterialState.pressed)) {
+                return 0;
+              }
+              return 4;
+            }),
+            //Border
+            shape: MaterialStateProperty.resolveWith<OutlinedBorder?>((states) {
+              return RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius ?? 12.0));
+            }),
+          ),
           child: Text(
             text ?? '',
-            style: TextStyle(color: textColor ?? Colors.white, fontSize: 18.0),
+            style: const TextStyle(fontSize: 18.0),
           )),
     );
   }

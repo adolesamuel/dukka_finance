@@ -65,4 +65,5 @@ enum Validator {
   phoneNumber,
   password,
   confirmPassword,
+  normal,
 }

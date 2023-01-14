@@ -26,9 +26,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       ? TextEditingController(text: 'adolesamuel@yahoo.com')
       : TextEditingController();
 
+  TextEditingController fullNameTextController = kDebugMode
+      ? TextEditingController(text: 'Adole Samuel')
+      : TextEditingController();
+
   TextEditingController passwordTextController = kDebugMode
       ? TextEditingController(text: '123456')
       : TextEditingController();
+
   TextEditingController confirmPasswordController = kDebugMode
       ? TextEditingController(text: '123456')
       : TextEditingController();
@@ -39,14 +44,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   void _handleSignup() {
     if (_formKey.currentState!.validate()) {
       ref.read(authStateProvider.notifier).createPassword(
-          email: emailTextController.text,
-          password: passwordTextController.text);
+            email: emailTextController.text,
+            fullName: fullNameTextController.text,
+            password: passwordTextController.text,
+          );
     }
   }
 
   @override
   void dispose() {
     emailTextController.dispose();
+    fullNameTextController.dispose();
     passwordTextController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
@@ -100,6 +108,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textInputAction: TextInputAction.next,
                 hintTextColor: AppColors.authFontColor,
                 validator: (value) => validator(value, Validator.email),
+              ),
+              TextFieldUnderline(
+                controller: fullNameTextController,
+                hintText: 'Enter Full Name',
+                normalTextColor: AppColors.authFontColor,
+                textInputAction: TextInputAction.next,
+                hintTextColor: AppColors.authFontColor,
+                validator: (value) => validator(value, Validator.normal),
               ),
               TextFieldUnderline(
                 controller: passwordTextController,

@@ -1,7 +1,7 @@
 import 'package:dukka_finance/features/auth/app/state/auth_state.dart';
+import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/auth/data/models/auth_signin.dart';
 import 'package:dukka_finance/features/auth/data/repository/auth_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authStateProvider =
@@ -13,7 +13,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       : _authRepository = ref.read(authRepoProvider),
         super(AuthStateInitial());
 
-  Stream<User?> authStateChanges() => _authRepository.authStream();
+  Stream<AppUser?> authStateChanges() => _authRepository.authStream();
 
   Future<void> login({required String email, required String password}) async {
     state = LogInLoadingState();
@@ -30,13 +30,15 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> createPassword(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String fullName}) async {
     state = CreatePasswordLoadingState();
 
-    final AuthSignIn loginItem = AuthSignIn(email, password);
+    final AuthSignUp signUpItem = AuthSignUp(email, password, fullName);
 
     final createPasswordOrError =
-        await _authRepository.createUserWithEmailAndPassword(loginItem);
+        await _authRepository.createUserWithEmailAndPassword(signUpItem);
 
     state = createPasswordOrError.fold(
       (l) => CreatePasswordFailureState(l),
@@ -45,6 +47,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> signOut() async {
+    state = LogOutLoading();
     await _authRepository.signOut();
+
+    state = LogOutDone(true);
   }
 }

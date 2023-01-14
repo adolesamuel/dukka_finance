@@ -1,21 +1,22 @@
+import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 ThemeData theme() {
   return ThemeData(
-    // scaffoldBackgroundColor: AppColors.scaffoldBackground,
+    scaffoldBackgroundColor: Colors.white,
     primarySwatch: const MaterialColor(
-      0xFF000A80,
+      AppColors.appThemeColor,
       {
-        50: Color.fromRGBO(0, 27, 128, .1),
-        100: Color.fromRGBO(0, 27, 128, .2),
-        200: Color.fromRGBO(0, 27, 128, .3),
-        300: Color.fromRGBO(0, 27, 128, .4),
-        400: Color.fromRGBO(0, 27, 128, .5),
-        500: Color.fromRGBO(0, 27, 128, .6),
-        600: Color.fromRGBO(0, 27, 128, .7),
-        700: Color.fromRGBO(0, 27, 128, .8),
-        800: Color.fromRGBO(0, 27, 128, .9),
-        900: Color.fromRGBO(0, 27, 128, 1),
+        50: Color.fromRGBO(72, 162, 214, .1),
+        100: Color.fromRGBO(72, 162, 214, .2),
+        200: Color.fromRGBO(72, 162, 214, .3),
+        300: Color.fromRGBO(72, 162, 214, .4),
+        400: Color.fromRGBO(72, 162, 214, .5),
+        500: Color.fromRGBO(72, 162, 214, .6),
+        600: Color.fromRGBO(72, 162, 214, .7),
+        700: Color.fromRGBO(72, 162, 214, .8),
+        800: Color.fromRGBO(72, 162, 214, .9),
+        900: Color.fromRGBO(72, 162, 214, 1),
       },
     ),
     primaryColor: const Color(0xFF000A80),
@@ -64,8 +65,9 @@ ThemeData theme() {
             )),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-          // disabledBackgroundColor: AppColors.disabledBtnColor,
-          ),
+        disabledBackgroundColor: AppColors.disabledBtnColor,
+        disabledForegroundColor: AppColors.disableBtnFontColor,
+      ),
     ),
   );
 }

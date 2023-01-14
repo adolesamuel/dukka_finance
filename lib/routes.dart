@@ -1,3 +1,4 @@
+import 'package:dukka_finance/features/auth/app/pages/sign_up.dart';
 import 'package:dukka_finance/rootpage.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ const String homeRoute = '/home';
 
 class ScreenPaths {
   static const String loginScreen = '/login_screen';
+  static const String signUpScreen = '/signup_screen';
   static const String debtorsListScreen = '/debtors_screen';
 }
 
@@ -18,6 +20,7 @@ Map<String, WidgetBuilder> routes(
 
     '/': (context) => const RootPage(),
     LoginScreen.route: (context) => const LoginScreen(),
+    SignUpScreen.route: (context) => const SignUpScreen(),
   };
 }
 

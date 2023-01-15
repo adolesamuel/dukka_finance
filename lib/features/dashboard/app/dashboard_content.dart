@@ -1,8 +1,10 @@
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/common/app_snackbar.dart';
+import 'package:dukka_finance/features/common/loading_widget.dart';
 import 'package:dukka_finance/features/dashboard/app/state/dashboard_state_notifier.dart';
 import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
 import 'package:dukka_finance/features/transactions/app/pages/transcation_list_tile.dart';
+import 'package:dukka_finance/features/transactions/app/state/transaction_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,6 +31,8 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    final activityState = ref.watch(activityStateProvider);
 
     return SizedBox.expand(
       child: Column(
@@ -70,11 +74,29 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
             },
           ),
           //
-          Expanded(
-            child: ListView.builder(
-                itemCount: 50,
-                itemBuilder: (context, index) => const TransactionListTile()),
-          ),
+          StreamBuilder<TransactionState>(
+              stream:
+                  ref.watch(activityStateProvider.notifier).streamTransaction(),
+              builder: (context, snapshot) {
+                final transactionState = snapshot.data;
+
+                if (transactionState is TransactionDataLoading) {
+                  return const LoadingWidget();
+                } else if (transactionState is TransactionData) {
+                  final dataList = transactionState.activity;
+
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: dataList.length,
+                      itemBuilder: (context, index) => TransactionListTile(
+                        transaction: dataList[index],
+                      ),
+                    ),
+                  );
+                } else {
+                  return Text('Error');
+                }
+              }),
           //
         ],
       ),

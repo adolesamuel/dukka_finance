@@ -6,18 +6,14 @@ import 'package:dukka_finance/features/transactions/app/pages/transaction_detail
 import 'package:flutter/material.dart';
 
 class TransactionListTile extends StatelessWidget {
-  const TransactionListTile({super.key});
+  final Activity transaction;
+  const TransactionListTile({
+    super.key,
+    required this.transaction,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Activity transaction = Activity(
-        id: 'asdfasdf',
-        type: ActivityType.debit,
-        date: DateTime.now(),
-        amount: 999.40,
-        description: 'Let Cassy Chill',
-        sender: 'Adole Samuel',
-        receiver: 'Cassy');
     return Card(
       margin: const EdgeInsets.all(8.0),
       shape: RoundedRectangleBorder(

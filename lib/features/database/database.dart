@@ -59,4 +59,12 @@ class AppDataBase {
       return true;
     });
   }
+
+  Stream<List<Map<String, dynamic>>?> streamTransactionData(
+      AppUser user) async* {
+    yield* ref
+        .collection(FirestorePath.transactionData(user.uid))
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((item) => item.data()).toList());
+  }
 }

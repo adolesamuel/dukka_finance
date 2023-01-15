@@ -7,7 +7,7 @@ import 'package:dukka_finance/features/common/loading_widget.dart';
 import 'package:dukka_finance/features/common/textfield_widgets.dart';
 import 'package:dukka_finance/features/debtors/models/transaction.dart';
 import 'package:dukka_finance/features/services/app_user_manager.dart';
-import 'package:dukka_finance/features/transactions/app/transaction_state_notifier.dart';
+import 'package:dukka_finance/features/transactions/app/state/transaction_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

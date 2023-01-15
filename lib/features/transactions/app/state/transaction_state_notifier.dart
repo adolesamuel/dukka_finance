@@ -31,4 +31,16 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
       (r) => AddTransactionSuccess(r),
     );
   }
+
+  Stream<TransactionState> streamTransaction() async* {
+    yield TransactionDataLoading();
+    AppUser user = AppUserManager.user;
+
+    yield* _transactionRepository.streamTransactionData(user).map((event) {
+      return event.fold(
+        (l) => TransactionFailure(l),
+        (r) => TransactionData(r),
+      );
+    });
+  }
 }

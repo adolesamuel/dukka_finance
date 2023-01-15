@@ -17,3 +17,17 @@ class AddTransactionSuccess extends TransactionState {
 
   AddTransactionSuccess(this.status);
 }
+
+class TransactionDataLoading extends TransactionState {}
+
+class TransactionFailure extends TransactionState {
+  final Failure failure;
+
+  TransactionFailure(this.failure);
+}
+
+class TransactionData extends TransactionState {
+  final List<Activity> activity;
+
+  TransactionData(this.activity);
+}

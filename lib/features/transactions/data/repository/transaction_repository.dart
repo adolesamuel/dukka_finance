@@ -16,6 +16,8 @@ abstract class TransactionRepository {
     AppUser user,
     Activity transaction,
   );
+
+  Stream<Either<Failure, List<Activity>>> streamTransactionData(AppUser user);
 }
 
 class TransactionRepositoryImpl implements TransactionRepository {
@@ -35,5 +37,20 @@ class TransactionRepositoryImpl implements TransactionRepository {
       call: dataBase.addTransaction(user, transaction),
       errorTitle: 'Error',
     );
+  }
+
+  @override
+  Stream<Either<Failure, List<Activity>>> streamTransactionData(
+      AppUser user) async* {
+    yield* dataBase.streamTransactionData(user).map((event) {
+      if (event == null) {
+        //Empty list
+        return const Right<Failure, List<Activity>>(<Activity>[]);
+      }
+      return Right<Failure, List<Activity>>(
+          event.map((e) => Activity.fromJson(e)).toList());
+    }).handleError((error, stack) {
+      return Left(CommonFailure('Error', error.toString()));
+    });
   }
 }

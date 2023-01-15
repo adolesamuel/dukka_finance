@@ -31,7 +31,11 @@ class TransactionListTile extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         onTap: () {
-          navigate(context, const TransactionDetailPage());
+          navigate(
+              context,
+              TransactionDetailPage(
+                transaction: transaction,
+              ));
         },
         leading: CircleAvatar(
           backgroundColor: Colors.black,

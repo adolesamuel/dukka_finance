@@ -1,7 +1,9 @@
+import 'package:dukka_finance/configs/navigator.dart';
 import 'package:dukka_finance/features/common/profile_icon.dart';
 import 'package:dukka_finance/features/common/search_icon.dart';
 import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
+import 'package:dukka_finance/features/transactions/app/pages/add_transaction_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -58,7 +60,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        tooltip: 'Add Transaction',
+        onPressed: () {
+          navigate(context, const AddTransactionPage());
+        },
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(

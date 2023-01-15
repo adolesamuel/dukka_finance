@@ -9,9 +9,9 @@ class TransactionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Transaction transaction = Transaction(
+    Activity transaction = Activity(
         id: 'asdfasdf',
-        type: TransactionType.debit,
+        type: ActivityType.debit,
         date: DateTime.now(),
         amount: 999.40,
         description: 'Let Cassy Chill',
@@ -46,14 +46,14 @@ class TransactionListTile extends StatelessWidget {
           ),
         ),
         title: Text(transaction.description),
-        subtitle: transaction.type == TransactionType.credit
+        subtitle: transaction.type == ActivityType.credit
             ? Text('From ${transaction.sender}')
             : Text('To ${transaction.receiver}'),
         trailing: Text(
           transaction.amount.toCurrency(),
           maxLines: 1,
           style: TextStyle(
-              color: transaction.type == TransactionType.debit
+              color: transaction.type == ActivityType.debit
                   ? Colors.red
                   : Colors.green,
               fontWeight: FontWeight.w300,

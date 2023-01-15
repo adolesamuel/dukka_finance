@@ -31,6 +31,6 @@ Map<String, dynamic> _$DebtToJson(Debt instance) => <String, dynamic>{
     };
 
 const _$TransactionTypeEnumMap = {
-  TransactionType.credit: 'credit',
-  TransactionType.debit: 'debit',
+  ActivityType.credit: 'credit',
+  ActivityType.debit: 'debit',
 };

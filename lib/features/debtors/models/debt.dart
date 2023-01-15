@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'debt.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class Debt extends Transaction {
+class Debt extends Activity {
   final DateTime dueDate;
   final bool isPaid;
 

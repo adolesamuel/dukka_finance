@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class TransactionDetailPage extends StatefulWidget {
-  final Transaction transaction;
+  final Activity transaction;
   const TransactionDetailPage({
     super.key,
     required this.transaction,
@@ -16,7 +16,7 @@ class TransactionDetailPage extends StatefulWidget {
 }
 
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
-  late Transaction transaction;
+  late Activity transaction;
 
   @override
   void initState() {
@@ -59,7 +59,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    transaction.type == TransactionType.debit ? 'To' : 'From',
+                    transaction.type == ActivityType.debit ? 'To' : 'From',
                     style: const TextStyle(color: Colors.white, fontSize: 15.0),
                   ),
                   Text(

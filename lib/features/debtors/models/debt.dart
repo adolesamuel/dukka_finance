@@ -10,7 +10,6 @@ class Debt extends Transaction {
 
   Debt({
     required super.id,
-    required super.name,
     required super.type,
     required super.date,
     required super.amount,

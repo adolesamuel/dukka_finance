@@ -11,7 +11,6 @@ class TransactionListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Transaction transaction = Transaction(
         id: 'asdfasdf',
-        name: 'Sent Money to Babe',
         type: TransactionType.debit,
         date: DateTime.now(),
         amount: 999.40,
@@ -38,24 +37,23 @@ class TransactionListTile extends StatelessWidget {
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           child: Text(
-            transaction.receiver[0],
+            transaction.receiver.substring(0, 2),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
           ),
         ),
-        title: Text(transaction.name),
-        subtitle: Text(transaction.description),
-        trailing: SizedBox(
-          // width: 80.w,
-          child: Text(
-            transaction.amount.toCurrency(),
-            maxLines: 1,
-            style: TextStyle(
-                color: transaction.type == TransactionType.debit
-                    ? Colors.red
-                    : Colors.green,
-                fontWeight: FontWeight.w300,
-                fontSize: 22.0),
-          ),
+        title: Text(transaction.description),
+        subtitle: transaction.type == TransactionType.credit
+            ? Text('From ${transaction.sender}')
+            : Text('To ${transaction.receiver}'),
+        trailing: Text(
+          transaction.amount.toCurrency(),
+          maxLines: 1,
+          style: TextStyle(
+              color: transaction.type == TransactionType.debit
+                  ? Colors.red
+                  : Colors.green,
+              fontWeight: FontWeight.w300,
+              fontSize: 22.0),
         ),
       ),
     );

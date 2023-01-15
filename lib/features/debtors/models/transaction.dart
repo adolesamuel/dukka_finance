@@ -5,7 +5,6 @@ part 'transaction.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Transaction {
   final String id;
-  final String name;
   final String sender;
   final String receiver;
   final TransactionType type;
@@ -15,7 +14,6 @@ class Transaction {
 
   Transaction({
     required this.id,
-    required this.name,
     required this.type,
     required this.date,
     required this.amount,

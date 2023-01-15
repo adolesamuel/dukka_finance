@@ -7,7 +7,6 @@ part 'expense.g.dart';
 class Expense extends Transaction {
   Expense(
       {required super.id,
-      required super.name,
       required super.date,
       required super.amount,
       required super.description,

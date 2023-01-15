@@ -7,7 +7,6 @@ part 'income.g.dart';
 class Income extends Transaction {
   Income(
       {required super.id,
-      required super.name,
       required super.date,
       required super.amount,
       required super.description,

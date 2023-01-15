@@ -8,7 +8,6 @@ part of 'debt.dart';
 
 Debt _$DebtFromJson(Map<String, dynamic> json) => Debt(
       id: json['id'] as String,
-      name: json['name'] as String,
       type: $enumDecode(_$TransactionTypeEnumMap, json['type']),
       date: DateTime.parse(json['date'] as String),
       amount: (json['amount'] as num).toDouble(),
@@ -21,7 +20,6 @@ Debt _$DebtFromJson(Map<String, dynamic> json) => Debt(
 
 Map<String, dynamic> _$DebtToJson(Debt instance) => <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
       'sender': instance.sender,
       'receiver': instance.receiver,
       'type': _$TransactionTypeEnumMap[instance.type]!,

@@ -149,3 +149,98 @@ class TextFieldUnderline extends StatelessWidget {
         ));
   }
 }
+
+// Reusable TextField used App Wide
+class TextFieldBox extends StatelessWidget {
+  final String? hintText;
+  final double? height;
+  final double? width;
+  final TextEditingController? controller;
+  final FormFieldValidator<String>? validator;
+  final TextInputAction? textInputAction;
+  final bool? obscureText;
+  final Widget? suffixColor;
+  final Widget? prefixIcon;
+  final bool? isCollapsed;
+  final bool? isEnabled;
+  final Function(String)? onChanged;
+  final bool? autoFocus;
+  final Widget? suffixIcon;
+  final TextStyle? hintStyle;
+  final bool? filled;
+  final Color? fillColor;
+  final int? maxLines;
+  final FocusNode? focusNode;
+  final Function()? onEditingComplete;
+
+  const TextFieldBox({
+    Key? key,
+    this.hintText,
+    this.height,
+    this.width,
+    this.controller,
+    this.validator,
+    this.textInputAction,
+    this.obscureText,
+    this.suffixColor,
+    this.prefixIcon,
+    this.isCollapsed,
+    this.isEnabled,
+    this.onChanged,
+    this.autoFocus,
+    this.suffixIcon,
+    this.hintStyle,
+    this.filled,
+    this.fillColor,
+    this.maxLines,
+    this.focusNode,
+    this.onEditingComplete,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width ?? 350.0.w,
+      height: height,
+      child: TextFormField(
+        controller: controller,
+        validator: validator,
+        focusNode: focusNode,
+        maxLines: maxLines ?? 1,
+        textInputAction: textInputAction,
+        onEditingComplete: onEditingComplete,
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(fontSize: 15, fontWeight: FontWeight.w400),
+        obscureText: obscureText ?? false,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 17.5),
+          suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon,
+          fillColor: fillColor,
+          filled: filled ?? true,
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.grey,
+              width: 1,
+            ),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.grey,
+            ),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.grey,
+            ),
+          ),
+          hintText: hintText,
+          hintStyle: hintStyle ?? const TextStyle(height: 0.5),
+        ),
+      ),
+    );
+  }
+}

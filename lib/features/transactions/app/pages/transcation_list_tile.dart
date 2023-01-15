@@ -1,4 +1,5 @@
 import 'package:dukka_finance/configs/navigator.dart';
+import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:dukka_finance/constants/helpful_functions.dart';
 import 'package:dukka_finance/features/debtors/models/transaction.dart';
 import 'package:dukka_finance/features/transactions/app/pages/transaction_detail_page.dart';
@@ -38,7 +39,7 @@ class TransactionListTile extends StatelessWidget {
               ));
         },
         leading: CircleAvatar(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.authAppBarBgColor,
           foregroundColor: Colors.white,
           child: Text(
             transaction.receiver.substring(0, 2),

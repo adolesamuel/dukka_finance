@@ -2,6 +2,7 @@ import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/common/app_snackbar.dart';
 import 'package:dukka_finance/features/dashboard/app/state/dashboard_state_notifier.dart';
 import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
+import 'package:dukka_finance/features/transactions/app/pages/transcation_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -71,11 +72,8 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
           //
           Expanded(
             child: ListView.builder(
-              itemCount: 50,
-              itemBuilder: (context, index) => const ListTile(
-                title: Text('Expense'),
-              ),
-            ),
+                itemCount: 50,
+                itemBuilder: (context, index) => const TransactionListTile()),
           ),
           //
         ],

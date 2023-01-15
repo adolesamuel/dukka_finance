@@ -15,13 +15,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
   PageController pageController = PageController();
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onNavItemTapped(int index) {
+    _selectedIndex = index;
+
     pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.easeIn,
     );
   }
@@ -33,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         centerTitle: true,
         leading: ProfileIcon(
           onPressed: () {
-            _onItemTapped(2);
+            _onNavItemTapped(2);
           },
         ),
         title: const Text(
@@ -64,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: _onNavItemTapped,
         // iconSize: 40,
         // showSelectedLabels: false,
         // showUnselectedLabels: false,

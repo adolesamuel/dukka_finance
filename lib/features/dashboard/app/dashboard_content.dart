@@ -94,7 +94,8 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
                     ),
                   );
                 } else {
-                  return Text('Error');
+                  //Todo create error widget.
+                  return const Text('Error');
                 }
               }),
           //

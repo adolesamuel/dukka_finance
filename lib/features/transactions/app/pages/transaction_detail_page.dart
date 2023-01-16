@@ -47,6 +47,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           children: [
             SizedBox(
               height: 50.0.h,
+            ), //Description
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                transaction.description,
+                style: const TextStyle(fontSize: 30.0, color: Colors.black),
+              ),
             ),
             //Receiver/Sender.
             Container(
@@ -63,21 +70,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     style: const TextStyle(color: Colors.white, fontSize: 15.0),
                   ),
                   Text(
-                    transaction.receiver,
+                    transaction.type == ActivityType.debit
+                        ? transaction.receiver
+                        : transaction.sender,
                     style: const TextStyle(color: Colors.white, fontSize: 30.0),
                   ),
                 ],
               ),
             ),
 
-            //Description
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                transaction.description,
-                style: const TextStyle(fontSize: 30.0, color: Colors.black),
-              ),
-            ),
             //Income/Expense
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),

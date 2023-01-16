@@ -1,12 +1,11 @@
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
-import 'package:dukka_finance/features/common/app_snackbar.dart';
 import 'package:dukka_finance/features/common/loading_widget.dart';
-import 'package:dukka_finance/features/dashboard/app/state/dashboard_state_notifier.dart';
-import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
+import 'package:dukka_finance/features/debtors/models/transaction.dart';
 import 'package:dukka_finance/features/transactions/app/pages/transcation_list_tile.dart';
 import 'package:dukka_finance/features/transactions/app/state/transaction_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../services/app_user_manager.dart';
 
@@ -21,86 +20,71 @@ class DashboardContent extends ConsumerStatefulWidget {
 
 class _DashboardContentState extends ConsumerState<DashboardContent>
     with AutomaticKeepAliveClientMixin {
-//TODO:Show recently added debts
-//TODO:show next due debts
   @override
   bool get wantKeepAlive => true;
 
   AppUser user = AppUserManager.user;
 
+  double sumForTheMonth = 0;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    final activityState = ref.watch(activityStateProvider);
+    return StreamBuilder<TransactionState>(
+        stream: ref.watch(activityStateProvider.notifier).streamTransaction(),
+        builder: (context, snapshot) {
+          final transactionState = snapshot.data;
+          if (transactionState is TransactionDataLoading) {
+            return const LoadingWidget();
+          } else if (transactionState is TransactionData) {
+            final dataList = transactionState.activity;
 
-    return SizedBox.expand(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('Current Balance'),
-          //
-          const SizedBox(height: 5.0),
-          //
-          Text(user.fullName),
-          //
-          const SizedBox(height: 5.0),
-          //
-          StreamBuilder<DashboardState>(
-            stream: ref
-                .watch(dashboardStateProvider.notifier)
-                .streamDashboardState(user),
-            builder: (context, snapshot) {
-              final state = snapshot.data;
-              DashboardData? dashboardData;
-              if (state is DashboardDataState) {
-                dashboardData = state.data;
-                print(dashboardData.toJson());
-              } else if (state is DashboardErrorState) {
-                AppSnackbar(
-                  context,
-                  text: state.failure.message,
-                  isError: true,
-                ).show();
-              }
+            sumForTheMonth = dataList
+                .where((element) => element.date.month == DateTime.now().month)
+                .fold(0, (previousValue, element) {
+              return previousValue +
+                  (element.type == ActivityType.credit
+                      ? element.amount
+                      : -element.amount);
+            });
 
-              return Text(
-                dashboardData?.balance.toStringAsFixed(2) ?? '',
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
-            },
-          ),
-          //
-          StreamBuilder<TransactionState>(
-              stream:
-                  ref.watch(activityStateProvider.notifier).streamTransaction(),
-              builder: (context, snapshot) {
-                final transactionState = snapshot.data;
-
-                if (transactionState is TransactionDataLoading) {
-                  return const LoadingWidget();
-                } else if (transactionState is TransactionData) {
-                  final dataList = transactionState.activity;
-
-                  return Expanded(
+            return SizedBox.expand(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //
+                  const SizedBox(height: 5.0),
+                  //
+                  Text(user.fullName),
+                  //
+                  const SizedBox(height: 5.0),
+                  Text(
+                      'Cumulative Transactions for ${DateFormat('MMMM').format(DateTime.now())}'),
+                  //
+                  Text(
+                    NumberFormat.simpleCurrency(name: 'NGN').currencySymbol +
+                        sumForTheMonth.toStringAsFixed(2),
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  //TODO handle empty List
+                  Expanded(
                     child: ListView.builder(
                       itemCount: dataList.length,
                       itemBuilder: (context, index) => TransactionListTile(
                         transaction: dataList[index],
                       ),
                     ),
-                  );
-                } else {
-                  //Todo create error widget.
-                  return const Text('Error');
-                }
-              }),
-          //
-        ],
-      ),
-    );
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return const Text('Error');
+          }
+        });
   }
 }

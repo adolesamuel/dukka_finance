@@ -172,6 +172,7 @@ class TextFieldBox extends StatelessWidget {
   final int? maxLines;
   final FocusNode? focusNode;
   final Function()? onEditingComplete;
+  final TextInputType? keyboardType;
 
   const TextFieldBox({
     Key? key,
@@ -195,6 +196,7 @@ class TextFieldBox extends StatelessWidget {
     this.maxLines,
     this.focusNode,
     this.onEditingComplete,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -209,6 +211,7 @@ class TextFieldBox extends StatelessWidget {
         maxLines: maxLines ?? 1,
         textInputAction: textInputAction,
         onEditingComplete: onEditingComplete,
+        keyboardType: keyboardType,
         style: Theme.of(context)
             .textTheme
             .bodyText1!

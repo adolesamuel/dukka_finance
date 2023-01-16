@@ -52,6 +52,11 @@ dependencies:
   firebase_auth: ^4.2.5
   video_player: ^2.4.9
   http: ^0.13.5
+  fluttercontactpicker: ^4.7.0
+  flutter_email_sender: ^5.2.0
+  flutter_sms: ^2.3.3
+  url_launcher: ^6.1.7
+  flutter_speed_dial: ^6.2.0
 
 
 dev_dependencies:

@@ -1,10 +1,12 @@
 import 'package:dukka_finance/configs/navigator.dart';
 import 'package:dukka_finance/features/common/profile_icon.dart';
-import 'package:dukka_finance/features/common/search_icon.dart';
 import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
+import 'package:dukka_finance/features/debtors/app/page/create_debt_page.dart';
+import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
 import 'package:dukka_finance/features/transactions/app/pages/add_transaction_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -40,9 +42,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: const Text(
           'Finance Tracker',
         ),
-        actions: const [
-          SearchIcon(),
-        ],
       ),
       body: PageView(
         controller: pageController,
@@ -53,25 +52,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
         children: const [
           DashboardContent(),
-          SizedBox(
-            child: Text('Payments'),
-          ),
+          DebtorListPage(),
           SettingsPage(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add Transaction',
-        onPressed: () {
-          navigate(context, const AddTransactionPage());
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: SpeedDial(
+        overlayColor: Colors.black12,
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        children: [
+          SpeedDialChild(
+              onTap: () {
+                navigate(context, const AddTransactionPage());
+              },
+              label: 'Add Transaction',
+              child: const Icon(Icons.add)),
+          SpeedDialChild(
+              onTap: () {
+                navigate(context, const CreateDebtPage());
+              },
+              label: 'Add Debtors',
+              child: const Icon(Icons.add)),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onNavItemTapped,
-        // iconSize: 40,
-        // showSelectedLabels: false,
-        // showUnselectedLabels: false,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: 'Debts'),

@@ -6,9 +6,9 @@ part of 'transaction.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Activity _$TransactionFromJson(Map<String, dynamic> json) => Activity(
+Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
       id: json['id'] as String,
-      type: $enumDecode(_$TransactionTypeEnumMap, json['type']),
+      type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       date: DateTime.parse(json['date'] as String),
       amount: (json['amount'] as num).toDouble(),
       description: json['description'] as String,
@@ -16,18 +16,17 @@ Activity _$TransactionFromJson(Map<String, dynamic> json) => Activity(
       receiver: json['receiver'] as String,
     );
 
-Map<String, dynamic> _$TransactionToJson(Activity instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
       'id': instance.id,
       'sender': instance.sender,
       'receiver': instance.receiver,
-      'type': _$TransactionTypeEnumMap[instance.type]!,
+      'type': _$ActivityTypeEnumMap[instance.type]!,
       'date': instance.date.toIso8601String(),
       'amount': instance.amount,
       'description': instance.description,
     };
 
-const _$TransactionTypeEnumMap = {
+const _$ActivityTypeEnumMap = {
   ActivityType.credit: 'credit',
   ActivityType.debit: 'debit',
 };

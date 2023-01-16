@@ -23,9 +23,27 @@ class Activity {
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) =>
-      _$TransactionFromJson(json);
+      _$ActivityFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TransactionToJson(this);
+  Map<String, dynamic> toJson() => _$ActivityToJson(this);
+
+  Activity copyWith({
+    String? sender,
+    String? receiver,
+    ActivityType? type,
+    DateTime? date,
+    double? amount,
+    String? description,
+  }) {
+    return Activity(
+        id: id,
+        type: type ?? this.type,
+        date: date ?? this.date,
+        amount: amount ?? this.amount,
+        description: description ?? this.description,
+        sender: sender ?? this.sender,
+        receiver: receiver ?? this.receiver);
+  }
 }
 
 enum ActivityType {

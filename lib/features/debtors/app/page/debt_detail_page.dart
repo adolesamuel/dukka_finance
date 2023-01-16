@@ -1,4 +1,5 @@
 import 'package:dukka_finance/constants/app_colors.dart';
+import 'package:dukka_finance/features/common/app_snackbar.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_delete_dialog.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_send_email_bottom_sheet.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_update_contact_info.dart';
@@ -35,6 +36,19 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
   @override
   Widget build(BuildContext context) {
     final format = DateFormat('EEEE, d MMMM yyyy, hh:mma');
+
+    ref.listen(debtStateProvider, (previous, next) {
+      if (next is DeleteDebtSuccess) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      } else if (next is DeleteDebtFailure) {
+        AppSnackbar(
+          context,
+          isError: true,
+          text: next.failure.message,
+        ).show();
+      }
+    });
 
     return Scaffold(
       //holds Date
@@ -229,7 +243,6 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                     onPressed: () {
                       showDeleteDialog(context, debt, onSelectYes: () {
                         ref.read(debtStateProvider.notifier).deleteDebt(debt);
-                        Navigator.pop(context);
                       });
                     },
                     child: const Text(

@@ -1,7 +1,7 @@
 import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-Future<void> sendEmail(Debt debt) async {
+Future<bool> sendEmail(Debt debt) async {
   final Email email = Email(
     body:
         'Hi ${debt.receiver} \nThis is a reminder about the loan of ${debt.amount} I gave you,'
@@ -12,4 +12,5 @@ Future<void> sendEmail(Debt debt) async {
   );
 
   await FlutterEmailSender.send(email);
+  return true;
 }

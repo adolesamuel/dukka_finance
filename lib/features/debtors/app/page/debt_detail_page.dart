@@ -1,5 +1,6 @@
 import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_send_email_bottom_sheet.dart';
+import 'package:dukka_finance/features/debtors/app/page/show_update_contact_info.dart';
 import 'package:dukka_finance/features/debtors/app/state/debt_state_notifier.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:flutter/material.dart';
@@ -165,7 +166,14 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                     children: [
                       OutlinedButton(
                           onPressed: () {
-                            showReminderBottomSheet(context, debt);
+                            showReminderBottomSheet(context, debt)
+                                .then((value) {
+                              if (value != null && value == true) {
+                                ref
+                                    .read(debtStateProvider.notifier)
+                                    .updateLastCallDate(debt);
+                              }
+                            });
                           },
                           child: const Text(
                             'Ask for It?',
@@ -175,28 +183,31 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                                 fontWeight: FontWeight.w300),
                           )),
                       OutlinedButton(
-                          onPressed: () {
-                            showDebtPaidDialog(context, debt, onSelectYes: () {
-                              ref
-                                  .read(debtStateProvider.notifier)
-                                  .hasPaidDebt(debt);
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: const Text(
-                            'Has Paid?',
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.green,
-                                fontWeight: FontWeight.w300),
-                          )),
+                        onPressed: () {
+                          showDebtPaidDialog(context, debt, onSelectYes: () {
+                            ref
+                                .read(debtStateProvider.notifier)
+                                .hasPaidDebt(debt);
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const Text(
+                          'Has Paid?',
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w300),
+                        ),
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showUpdateContactInfoModal(context, debt);
+                          },
                           child: const Text(
                             'Update Contact Info',
                             style: TextStyle(
@@ -209,6 +220,7 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                 ],
               ),
 
+            //Delete Button
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

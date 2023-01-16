@@ -3,11 +3,10 @@ import 'package:dukka_finance/features/services/contact_user_services/make_phone
 import 'package:dukka_finance/features/services/contact_user_services/send_email.dart';
 import 'package:dukka_finance/features/services/contact_user_services/send_sms.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-showReminderBottomSheet(BuildContext context, Debt debt) {
-  showModalBottomSheet(
+Future<bool?> showReminderBottomSheet(BuildContext context, Debt debt) async {
+  final value = await showModalBottomSheet<bool>(
     context: context,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
@@ -23,7 +22,8 @@ showReminderBottomSheet(BuildContext context, Debt debt) {
                 width: 200.0.w,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    sendEmail(debt);
+                    sendEmail(debt)
+                        .then((value) => Navigator.pop(context, value));
                   },
                   label: const Text('Send Email'),
                   icon: const Icon(Icons.email),
@@ -33,7 +33,8 @@ showReminderBottomSheet(BuildContext context, Debt debt) {
                 width: 200.0.w,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    sendSms(debt);
+                    sendSms(debt)
+                        .then((value) => Navigator.pop(context, value));
                   },
                   label: const Text('Send Message'),
                   icon: const Icon(Icons.message),
@@ -43,7 +44,8 @@ showReminderBottomSheet(BuildContext context, Debt debt) {
                 width: 200.0.w,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    makePhoneCall(debt);
+                    makePhoneCall(debt)
+                        .then((value) => Navigator.pop(context, value));
                   },
                   label: const Text('Make Phone Call'),
                   icon: const Icon(Icons.phone),
@@ -55,6 +57,7 @@ showReminderBottomSheet(BuildContext context, Debt debt) {
       );
     },
   );
+  return value;
 }
 
 showDebtPaidDialog(

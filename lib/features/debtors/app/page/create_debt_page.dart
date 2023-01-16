@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dukka_finance/constants/helpful_functions.dart';
+import 'package:dukka_finance/features/common/button_widget.dart';
 import 'package:dukka_finance/features/common/textfield_widgets.dart';
 import 'package:dukka_finance/features/debtors/app/page/custom_date_picker.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,10 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
           (contact.name?.middleName ?? '') +
           (contact.name?.lastName ?? '');
     }
+  }
+
+  void _handleCreateDebt() {
+    _formKey.currentState!.validate();
   }
 
   @override
@@ -90,10 +95,11 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
                 //amount
                 TextFieldBox(
                   hintText: 'Amount',
-                  // controller: amountController,
+                  controller: amountController,
                   textInputAction: TextInputAction.done,
-                  validator: (value) => validator(value, Validator.normal),
-                  // onEditingComplete: _handleAddTransaction,
+                  keyboardType: TextInputType.number,
+                  validator: (value) => validator(value, Validator.digits),
+                  onEditingComplete: _handleCreateDebt,
                 ),
                 space,
 
@@ -109,10 +115,10 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
                 // if (state is AddTransactionLoadingState)
                 //   const LoadingWidget()
                 // else
-                //   AppButton(
-                //     text: 'Add Transaction',
-                //     onPressed: _handleAddTransaction,
-                //   ),
+                AppButton(
+                  text: 'Add Debt',
+                  onPressed: _handleCreateDebt,
+                ),
                 SizedBox(
                   height: 10.0.h,
                 )

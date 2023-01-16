@@ -46,19 +46,22 @@ String? validator(
   String? passwordText,
 }) {
   if (value!.trim().isEmpty) {
-    return "$field cannot be empty";
+    return "This cannot be empty";
   } else if (field == Validator.email &&
       !value.contains(RegExp(
           r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"))) {
     return 'Email is Invalid';
   } else if (field == Validator.phoneNumber &&
       !value.contains(RegExp(r'^[0-9]{11}$'))) {
-    return "$field isn't valid";
+    return "Phone Number isn't valid";
   } else if (field == Validator.password && !(value.length > 4)) {
-    return "$field isn't long enough";
+    return "Password isn't long enough";
   } else if (field == Validator.confirmPassword &&
       (value.trim() != passwordText?.trim())) {
     return "Passwords aren't the same";
+  } else if (field == Validator.digits &&
+      (!RegExp(r'^\d*\.?\d+$').hasMatch(value))) {
+    return "Please enter valid Numbers";
   } else {
     return null;
   }
@@ -70,6 +73,7 @@ enum Validator {
   password,
   confirmPassword,
   normal,
+  digits,
 }
 
 extension Currency on num {

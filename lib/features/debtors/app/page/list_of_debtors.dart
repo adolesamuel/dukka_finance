@@ -1,5 +1,7 @@
 import 'package:dukka_finance/features/auth/app/state/auth_state_notifier.dart';
 import 'package:dukka_finance/features/common/button_widget.dart';
+import 'package:dukka_finance/features/debtors/app/page/debtors_list_tile.dart';
+import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:dukka_finance/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +29,16 @@ class _DebtorListPageState extends State<DebtorListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final debt = Debt(
+        id: DateTime.now().toIso8601String(),
+        amount: 50000,
+        description: 'borrowed',
+        receiver: 'Sam',
+        sender: 'Jeff',
+        date: DateTime(2023, 1, 1),
+        dueDate: DateTime(2023, 1, 2),
+        isPaid: false);
+
     return Scaffold(
       body: Center(
         child: SizedBox.expand(
@@ -44,11 +56,9 @@ class _DebtorListPageState extends State<DebtorListPage> {
               spacer,
               Expanded(
                 child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) => ListTile(
-                    onTap: () {},
-                  ),
-                ),
+                    itemCount: 10,
+                    itemBuilder: (context, index) =>
+                        DebtorsListTile(debt: debt)),
               )
             ],
           ),

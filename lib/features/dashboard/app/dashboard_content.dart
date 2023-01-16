@@ -31,66 +31,60 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return SizedBox.expand(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          //
-          const SizedBox(height: 5.0),
-          //
-          Text(user.fullName),
-          //
-          const SizedBox(height: 5.0),
-          Text(
-              'Cumulative Transactions for ${DateFormat('MMMM').format(DateTime.now())}'),
-          //
-          Text(
-            NumberFormat.simpleCurrency(name: 'NGN').currencySymbol +
-                sumForTheMonth.toStringAsFixed(2),
-            style: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+    return StreamBuilder<TransactionState>(
+        stream: ref.watch(activityStateProvider.notifier).streamTransaction(),
+        builder: (context, snapshot) {
+          final transactionState = snapshot.data;
+          if (transactionState is TransactionDataLoading) {
+            return const LoadingWidget();
+          } else if (transactionState is TransactionData) {
+            final dataList = transactionState.activity;
 
-          //
-          StreamBuilder<TransactionState>(
-            stream:
-                ref.watch(activityStateProvider.notifier).streamTransaction(),
-            builder: (context, snapshot) {
-              final transactionState = snapshot.data;
+            sumForTheMonth = dataList
+                .where((element) => element.date.month == DateTime.now().month)
+                .fold(0, (previousValue, element) {
+              return previousValue +
+                  (element.type == ActivityType.credit
+                      ? element.amount
+                      : -element.amount);
+            });
 
-              if (transactionState is TransactionDataLoading) {
-                return const LoadingWidget();
-              } else if (transactionState is TransactionData) {
-                final dataList = transactionState.activity;
-
-                sumForTheMonth = dataList
-                    .where(
-                        (element) => element.date.month == DateTime.now().month)
-                    .fold(0, (previousValue, element) {
-                  return previousValue +
-                      (element.type == ActivityType.credit
-                          ? element.amount
-                          : -element.amount);
-                });
-
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: dataList.length,
-                    itemBuilder: (context, index) => TransactionListTile(
-                      transaction: dataList[index],
+            return SizedBox.expand(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //
+                  const SizedBox(height: 5.0),
+                  //
+                  Text(user.fullName),
+                  //
+                  const SizedBox(height: 5.0),
+                  Text(
+                      'Cumulative Transactions for ${DateFormat('MMMM').format(DateTime.now())}'),
+                  //
+                  Text(
+                    NumberFormat.simpleCurrency(name: 'NGN').currencySymbol +
+                        sumForTheMonth.toStringAsFixed(2),
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                );
-              } else {
-                return const Text('Error');
-              }
-            },
-          ),
-          //
-        ],
-      ),
-    );
+                  //TODO handle empty List
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: dataList.length,
+                      itemBuilder: (context, index) => TransactionListTile(
+                        transaction: dataList[index],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return const Text('Error');
+          }
+        });
   }
 }

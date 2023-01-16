@@ -63,7 +63,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     style: const TextStyle(color: Colors.white, fontSize: 15.0),
                   ),
                   Text(
-                    transaction.receiver,
+                    transaction.type == ActivityType.debit
+                        ? transaction.receiver
+                        : transaction.sender,
                     style: const TextStyle(color: Colors.white, fontSize: 30.0),
                   ),
                 ],

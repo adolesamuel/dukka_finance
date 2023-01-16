@@ -26,28 +26,17 @@ class _BuildDatePickerState extends State<BuildDatePicker> {
           initialDate: DateTime.now(),
           firstDate: DateTime.now(),
           lastDate: DateTime(currentDate.year + 20),
-        ).then((selectedDate) {
-          setState(
-            () {
-              if (selectedDate != null) {
-                final formattedDate = DateFormat('dd | MM | yyyy hh:mm');
-
-                dateString = formattedDate.format(selectedDate);
-              }
-            },
-          );
-          return selectedDate;
-        });
+        );
         final chosenTime = await showTimePicker(
             context: context, initialTime: TimeOfDay.now());
 
-        if (chosenDay != null || chosenTime != null) {
+        if (chosenDay != null && chosenTime != null) {
           selectDate = DateTime(
-            chosenDay?.year ?? DateTime.now().year,
-            selectDate?.month ?? DateTime.now().month,
-            selectDate?.day ?? DateTime.now().day,
-            chosenTime?.hour ?? DateTime.now().hour,
-            chosenTime?.minute ?? DateTime.now().minute,
+            chosenDay.year,
+            chosenDay.month,
+            chosenDay.day,
+            chosenTime.hour,
+            chosenTime.minute,
           );
         }
         setState(() {

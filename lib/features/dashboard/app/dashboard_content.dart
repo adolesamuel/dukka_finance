@@ -21,8 +21,6 @@ class DashboardContent extends ConsumerStatefulWidget {
 
 class _DashboardContentState extends ConsumerState<DashboardContent>
     with AutomaticKeepAliveClientMixin {
-//TODO:Show recently added debts
-//TODO:show next due debts
   @override
   bool get wantKeepAlive => true;
 

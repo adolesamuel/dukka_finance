@@ -5,7 +5,6 @@ import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
 import 'package:dukka_finance/features/debtors/app/page/create_debt_page.dart';
 import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
-import 'package:dukka_finance/features/transactions/app/pages/add_transaction_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -42,9 +41,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: const Text(
           'Finance Tracker',
         ),
-        actions: const [
-          SearchIcon(),
-        ],
       ),
       body: PageView(
         controller: pageController,

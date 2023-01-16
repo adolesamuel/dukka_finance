@@ -51,222 +51,244 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
       }
     });
 
-    return Scaffold(
-      //holds Date
-      appBar: AppBar(
-        title: Text(
-          format.format(
-            debt.date,
-          ),
-          style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
-        ),
-      ),
+    return StreamBuilder<DebtState>(
+        stream: ref.read(debtStateProvider.notifier).streamDebtDetail(debt),
+        builder: (context, snapshot) {
+          final debtState = snapshot.data;
 
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 50.0.h,
-            ),
-            //Description
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                debt.description,
-                style: const TextStyle(fontSize: 30.0, color: Colors.black),
+          if (debtState is DebtDetailSuccess) {
+            if (debtState.debt != null) {
+              debt = debtState.debt!;
+            }
+          }
+
+          return Scaffold(
+            //holds Date
+            appBar: AppBar(
+              title: Text(
+                format.format(
+                  debt.date,
+                ),
+                style: const TextStyle(
+                    fontSize: 16.0, fontWeight: FontWeight.w400),
               ),
             ),
-            //Receiver/Sender.
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              margin: EdgeInsets.zero,
-              decoration: BoxDecoration(
-                  color: AppColors.authAppBarBgColor,
-                  borderRadius: BorderRadius.circular(10.0)),
+
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
-                    'To',
-                    style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  SizedBox(
+                    height: 50.0.h,
                   ),
-                  Text(
-                    debt.receiver,
-                    style: const TextStyle(color: Colors.white, fontSize: 30.0),
-                  ),
-                ],
-              ),
-            ),
-
-            //Income/Expense
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                debt.isPaid ? 'Paid' : 'Borrowed',
-                style: const TextStyle(fontSize: 30.0, color: Colors.black),
-              ),
-            ),
-
-            //Amount of Transaction
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  NumberFormat.simpleCurrency(name: 'NGN').currencySymbol,
-                  style: const TextStyle(fontSize: 18.0, color: Colors.black),
-                ),
-                Text(
-                  debt.amount.toStringAsFixed(2),
-                  style: const TextStyle(
-                      fontSize: 30.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300),
-                ),
-              ],
-            ),
-            space,
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                'Due Date',
-                style: TextStyle(fontSize: 30.0, color: Colors.black),
-              ),
-            ),
-            Text(
-              format.format(debt.dueDate),
-              style: const TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w300),
-            ),
-            space,
-
-            if (debt.lastContactDate != null)
-              Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                  //Description
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      'Last Contacted',
-                      style: TextStyle(fontSize: 20.0, color: Colors.black),
+                      debt.description,
+                      style:
+                          const TextStyle(fontSize: 30.0, color: Colors.black),
                     ),
                   ),
-                  Text(
-                    format.format(debt.lastContactDate!),
-                    style: const TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w300),
-                  ),
-                ],
-              )
-            else
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "You haven't sent a reminder",
-                  style: TextStyle(fontSize: 20.0, color: Colors.black),
-                ),
-              ),
-
-            space,
-
-            if (!debt.isPaid)
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      OutlinedButton(
-                          onPressed: () {
-                            if ((debt.receiverEmail?.isEmpty ?? false) &&
-                                (debt.receiverPhoneNumber?.isEmpty ?? false)) {
-                              AppSnackbar(
-                                context,
-                                isError: true,
-                                text: 'Update Debtor Contact Information',
-                              ).show();
-                            } else {
-                              showReminderBottomSheet(context, debt)
-                                  .then((value) {
-                                if (value != null && value == true) {
-                                  ref
-                                      .read(debtStateProvider.notifier)
-                                      .updateLastCallDate(debt);
-                                }
-                              });
-                            }
-                          },
-                          child: const Text(
-                            'Ask for It?',
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.red,
-                                fontWeight: FontWeight.w300),
-                          )),
-                      OutlinedButton(
-                        onPressed: () {
-                          showDebtPaidDialog(context, debt, onSelectYes: () {
-                            ref
-                                .read(debtStateProvider.notifier)
-                                .hasPaidDebt(debt);
-                            Navigator.pop(context);
-                          });
-                        },
-                        child: const Text(
-                          'Has Paid?',
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.green,
-                              fontWeight: FontWeight.w300),
+                  //Receiver/Sender.
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    margin: EdgeInsets.zero,
+                    decoration: BoxDecoration(
+                        color: AppColors.authAppBarBgColor,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'To',
+                          style: TextStyle(color: Colors.white, fontSize: 15.0),
                         ),
+                        Text(
+                          debt.receiver,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 30.0),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //Income/Expense
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      debt.isPaid ? 'Paid' : 'Borrowed',
+                      style:
+                          const TextStyle(fontSize: 30.0, color: Colors.black),
+                    ),
+                  ),
+
+                  //Amount of Transaction
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        NumberFormat.simpleCurrency(name: 'NGN').currencySymbol,
+                        style: const TextStyle(
+                            fontSize: 18.0, color: Colors.black),
+                      ),
+                      Text(
+                        debt.amount.toStringAsFixed(2),
+                        style: const TextStyle(
+                            fontSize: 30.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
+                  space,
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      'Due Date',
+                      style: TextStyle(fontSize: 30.0, color: Colors.black),
+                    ),
+                  ),
+                  Text(
+                    format.format(debt.dueDate),
+                    style: const TextStyle(
+                        fontSize: 30.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300),
+                  ),
+                  space,
+
+                  if (debt.lastContactDate != null)
+                    Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            'Last Contacted',
+                            style:
+                                TextStyle(fontSize: 20.0, color: Colors.black),
+                          ),
+                        ),
+                        Text(
+                          format.format(debt.lastContactDate!),
+                          style: const TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w300),
+                        ),
+                      ],
+                    )
+                  else
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        "You haven't sent a reminder",
+                        style: TextStyle(fontSize: 20.0, color: Colors.black),
+                      ),
+                    ),
+
+                  space,
+
+                  if (!debt.isPaid)
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            OutlinedButton(
+                                onPressed: () {
+                                  if ((debt.receiverEmail?.isEmpty ?? false) &&
+                                      (debt.receiverPhoneNumber?.isEmpty ??
+                                          false)) {
+                                    AppSnackbar(
+                                      context,
+                                      isError: true,
+                                      text: 'Update Debtor Contact Information',
+                                    ).show();
+                                  } else {
+                                    showReminderBottomSheet(context, debt)
+                                        .then((value) {
+                                      if (value != null && value == true) {
+                                        ref
+                                            .read(debtStateProvider.notifier)
+                                            .updateLastCallDate(debt);
+                                      }
+                                    });
+                                  }
+                                },
+                                child: const Text(
+                                  'Ask for It?',
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w300),
+                                )),
+                            OutlinedButton(
+                              onPressed: () {
+                                showDebtPaidDialog(context, debt,
+                                    onSelectYes: () {
+                                  ref
+                                      .read(debtStateProvider.notifier)
+                                      .hasPaidDebt(debt);
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: const Text(
+                                'Has Paid?',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            OutlinedButton(
+                                onPressed: () {
+                                  showUpdateContactInfoModal(context, debt);
+                                },
+                                child: const Text(
+                                  'Update Contact Info',
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w300),
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                  //Delete Button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       OutlinedButton(
                           onPressed: () {
-                            showUpdateContactInfoModal(context, debt);
+                            showDeleteDialog(context, debt, onSelectYes: () {
+                              ref
+                                  .read(debtStateProvider.notifier)
+                                  .deleteDebt(debt);
+                            });
                           },
                           child: const Text(
-                            'Update Contact Info',
+                            'Delete!',
                             style: TextStyle(
                                 fontSize: 20.0,
-                                color: Colors.blue,
+                                color: Colors.red,
                                 fontWeight: FontWeight.w300),
                           )),
                     ],
                   ),
                 ],
               ),
-
-            //Delete Button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton(
-                    onPressed: () {
-                      showDeleteDialog(context, debt, onSelectYes: () {
-                        ref.read(debtStateProvider.notifier).deleteDebt(debt);
-                      });
-                    },
-                    child: const Text(
-                      'Delete!',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.red,
-                          fontWeight: FontWeight.w300),
-                    )),
-              ],
             ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }

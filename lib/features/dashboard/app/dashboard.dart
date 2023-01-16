@@ -2,6 +2,7 @@ import 'package:dukka_finance/configs/navigator.dart';
 import 'package:dukka_finance/features/common/profile_icon.dart';
 import 'package:dukka_finance/features/common/search_icon.dart';
 import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
+import 'package:dukka_finance/features/debtors/app/page/create_debt_page.dart';
 import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
 import 'package:dukka_finance/features/transactions/app/pages/add_transaction_page.dart';
@@ -61,16 +62,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add Transaction',
         onPressed: () {
-          navigate(context, const AddTransactionPage());
+          navigate(context, const CreateDebtPage());
         },
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onNavItemTapped,
-        // iconSize: 40,
-        // showSelectedLabels: false,
-        // showUnselectedLabels: false,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: 'Debts'),

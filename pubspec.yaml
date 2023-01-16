@@ -52,6 +52,7 @@ dependencies:
   firebase_auth: ^4.2.5
   video_player: ^2.4.9
   http: ^0.13.5
+  fluttercontactpicker: ^4.7.0
 
 
 dev_dependencies:

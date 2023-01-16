@@ -1,21 +1,27 @@
 import 'dart:io';
 
 import 'package:dukka_finance/constants/helpful_functions.dart';
+import 'package:dukka_finance/features/common/app_snackbar.dart';
 import 'package:dukka_finance/features/common/button_widget.dart';
+import 'package:dukka_finance/features/common/loading_widget.dart';
 import 'package:dukka_finance/features/common/textfield_widgets.dart';
 import 'package:dukka_finance/features/debtors/app/page/custom_date_picker.dart';
+import 'package:dukka_finance/features/debtors/app/state/debt_state_notifier.dart';
+import 'package:dukka_finance/features/debtors/models/debt.dart';
+import 'package:dukka_finance/features/services/app_user_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 
-class CreateDebtPage extends StatefulWidget {
+class CreateDebtPage extends ConsumerStatefulWidget {
   const CreateDebtPage({super.key});
 
   @override
-  State<CreateDebtPage> createState() => _CreateDebtPageState();
+  ConsumerState<CreateDebtPage> createState() => _CreateDebtPageState();
 }
 
-class _CreateDebtPageState extends State<CreateDebtPage> {
+class _CreateDebtPageState extends ConsumerState<CreateDebtPage> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController nameController = TextEditingController();
@@ -23,6 +29,7 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  DateTime? dueDate;
 
   @override
   void dispose() {
@@ -70,11 +77,49 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
   }
 
   void _handleCreateDebt() {
-    _formKey.currentState!.validate();
+    if (_formKey.currentState!.validate()) {
+      //create debt item
+      if (dueDate != null) {
+        final debt = Debt(
+          id: DateTime.now().toIso8601String(),
+          amount: double.parse(amountController.text),
+          description: descriptionController.text,
+          receiver: nameController.text,
+          receiverPhoneNumber: phoneController.text,
+          receiverEmail: emailController.text,
+          sender: AppUserManager.user.fullName,
+          date: DateTime.now(),
+          dueDate: dueDate!,
+          isPaid: false,
+        );
+
+        ref.read(debtStateProvider.notifier).addDebt(debt);
+      } else {
+        AppSnackbar(
+          context,
+          isError: true,
+          text: 'Please select Due Date',
+        ).show();
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(debtStateProvider);
+
+    ref.listen(debtStateProvider, (previous, next) {
+      if (next is CreateDebtFailure) {
+        AppSnackbar(
+          context,
+          isError: true,
+          text: next.failure.message,
+        ).show();
+      } else {
+        Navigator.pop(context);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text('Add Debtor')),
       body: Form(
@@ -114,13 +159,17 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
                 //Description
                 TextFieldBox(
                   hintText: 'Description',
-                  // controller: descController,
+                  controller: descriptionController,
                   textInputAction: TextInputAction.next,
                   validator: (value) => validator(value, Validator.normal),
                 ),
+                //
                 space,
+
                 BuildDatePicker(
-                  onSelectDate: (date) {},
+                  onSelectDate: (date) {
+                    dueDate = date;
+                  },
                 ),
 
                 space,
@@ -145,13 +194,13 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
                 ),
                 space,
 
-                // if (state is AddTransactionLoadingState)
-                //   const LoadingWidget()
-                // else
-                AppButton(
-                  text: 'Add Debt',
-                  onPressed: _handleCreateDebt,
-                ),
+                if (state is CreateDebtLoading)
+                  const LoadingWidget()
+                else
+                  AppButton(
+                    text: 'Add Debt',
+                    onPressed: _handleCreateDebt,
+                  ),
                 SizedBox(
                   height: 10.0.h,
                 )

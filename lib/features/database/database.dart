@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
+import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:dukka_finance/features/debtors/models/transaction.dart';
-import 'package:dukka_finance/features/services/app_user_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FirestorePath {
   static String dashboardData(String uid) => 'dashboard/$uid';
   static String transactionData(String uid) => 'users/$uid/transactions';
+  static String debtorsData(String uid) => 'users/$uid/debts';
 }
 
 final appDatabaseProvider =
@@ -66,5 +67,15 @@ class AppDataBase {
         .collection(FirestorePath.transactionData(user.uid))
         .snapshots()
         .map((snapshot) => snapshot.docs.map((item) => item.data()).toList());
+  }
+
+  Future<bool> addDebt(AppUser user, Debt debt) async {
+    final collection = ref.collection(FirestorePath.debtorsData(user.uid));
+
+    await collection.add(debt.toJson());
+
+    await addTransaction(user, debt.toActivity());
+
+    return true;
   }
 }

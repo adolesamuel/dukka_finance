@@ -29,4 +29,15 @@ class Debt extends Activity {
 
   @override
   Map<String, dynamic> toJson() => _$DebtToJson(this);
+
+  Activity toActivity() {
+    return Activity(
+        id: id,
+        type: type,
+        date: date,
+        amount: amount,
+        description: description,
+        sender: sender,
+        receiver: receiver);
+  }
 }

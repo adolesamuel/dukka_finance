@@ -1,6 +1,5 @@
 import 'package:dukka_finance/configs/navigator.dart';
 import 'package:dukka_finance/features/common/profile_icon.dart';
-import 'package:dukka_finance/features/common/search_icon.dart';
 import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
 import 'package:dukka_finance/features/debtors/app/page/create_debt_page.dart';
 import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';

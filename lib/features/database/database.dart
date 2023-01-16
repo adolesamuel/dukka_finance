@@ -67,8 +67,13 @@ class AppDataBase {
       AppUser user) async* {
     yield* ref
         .collection(FirestorePath.transactionData(user.uid))
+        .orderBy('date')
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((item) => item.data()).toList());
+        .map((snapshot) => snapshot.docs
+            .map((item) => item.data())
+            .toList()
+            .reversed
+            .toList());
   }
 
   Future<bool> addDebt(AppUser user, Debt debt) async {

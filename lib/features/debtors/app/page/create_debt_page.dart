@@ -19,12 +19,20 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController nameController = TextEditingController();
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  //TODO Add Date Picker.
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    amountController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
 
   final space = SizedBox(
     height: 30.0.h,
@@ -32,14 +40,33 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
 
   Future<void> _getContact() async {
     if (Platform.isIOS) {
+      final PhoneContact contact =
+          await FlutterContactPicker.pickPhoneContact();
+
+      if (contact.phoneNumber?.number != null) {
+        phoneController.text = contact.phoneNumber?.number ?? '';
+      }
+
+      nameController.text = contact.fullName ?? '';
     } else if (Platform.isAndroid) {
       final FullContact contact = await FlutterContactPicker.pickFullContact();
-      emailController.text = contact.emails[0].email ?? '';
-      phoneController.text = contact.phones[0].number ?? '';
-      nameController.text = (contact.name?.firstName ?? '') +
-          (contact.name?.middleName ?? '') +
-          (contact.name?.lastName ?? '');
+      if (contact.emails.isNotEmpty) {
+        emailController.text = contact.emails[0].email ?? '';
+      }
+      if (contact.phones.isNotEmpty) {
+        phoneController.text = contact.phones[0].number ?? '';
+      }
+      nameController.text = '${(contact.name?.firstName ?? '')} '
+          '${(contact.name?.middleName ?? '')} '
+          '${(contact.name?.lastName ?? '')}';
     }
+  }
+
+  Future<void> _pickEmail() async {
+    //used to pick email on iOS
+    final EmailContact contact = await FlutterContactPicker.pickEmailContact();
+
+    emailController.text = contact.email?.email ?? '';
   }
 
   void _handleCreateDebt() {
@@ -65,6 +92,11 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
                 ),
                 space,
                 TextFieldBox(
+                  prefixIcon: Platform.isIOS
+                      ? IconButton(
+                          onPressed: _pickEmail,
+                          icon: const Icon(Icons.attach_email))
+                      : null,
                   controller: emailController,
                   textInputAction: TextInputAction.next,
                   validator: (value) => validator(value, Validator.email),
@@ -111,6 +143,7 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
                   label: const Text('Add From Contacts'),
                   icon: const Icon(Icons.person_add),
                 ),
+                space,
 
                 // if (state is AddTransactionLoadingState)
                 //   const LoadingWidget()

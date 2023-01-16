@@ -1,5 +1,6 @@
 import 'package:dukka_finance/features/common/custom_sign_up_date_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class BuildDatePicker extends StatefulWidget {
@@ -17,7 +18,7 @@ class _BuildDatePickerState extends State<BuildDatePicker> {
   @override
   Widget build(BuildContext context) {
     return CustomSignUpDatePicker(
-      width: 300,
+      width: 320.0.w,
       press: () async {
         final currentDate = DateTime.now();
         final chosenDay = await showDatePicker(

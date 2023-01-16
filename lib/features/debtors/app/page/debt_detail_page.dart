@@ -17,6 +17,10 @@ class DebtDetailPage extends StatefulWidget {
 
 class _DebtDetailPageState extends State<DebtDetailPage> {
   late Debt debt;
+
+  final space = SizedBox(
+    height: 20.0.h,
+  );
   @override
   void initState() {
     super.initState();
@@ -78,11 +82,11 @@ class _DebtDetailPageState extends State<DebtDetailPage> {
             ),
 
             //Income/Expense
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
-                'Borrowed',
-                style: TextStyle(fontSize: 30.0, color: Colors.black),
+                debt.isPaid ? 'Paid' : 'Borrowed',
+                style: const TextStyle(fontSize: 30.0, color: Colors.black),
               ),
             ),
 
@@ -102,7 +106,111 @@ class _DebtDetailPageState extends State<DebtDetailPage> {
                       fontWeight: FontWeight.w300),
                 ),
               ],
-            )
+            ),
+            space,
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                'Due Date',
+                style: TextStyle(fontSize: 30.0, color: Colors.black),
+              ),
+            ),
+            Text(
+              format.format(debt.dueDate),
+              style: const TextStyle(
+                  fontSize: 30.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300),
+            ),
+            space,
+
+            if (debt.lastContactDate != null)
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      'Last Contacted',
+                      style: TextStyle(fontSize: 20.0, color: Colors.black),
+                    ),
+                  ),
+                  Text(
+                    format.format(debt.lastContactDate!),
+                    style: const TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300),
+                  ),
+                ],
+              )
+            else
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  "You haven't sent a reminder",
+                  style: TextStyle(fontSize: 20.0, color: Colors.black),
+                ),
+              ),
+
+            space,
+
+            if (!debt.isPaid)
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      OutlinedButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Ask for It?',
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.red,
+                                fontWeight: FontWeight.w300),
+                          )),
+                      OutlinedButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Has Paid?',
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.green,
+                                fontWeight: FontWeight.w300),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      OutlinedButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Update Contact Info',
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w300),
+                          )),
+                    ],
+                  ),
+                ],
+              ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Delete!',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w300),
+                    )),
+              ],
+            ),
           ],
         ),
       ),

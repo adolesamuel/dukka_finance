@@ -6,6 +6,7 @@ import 'package:dukka_finance/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 class DebtorListPage extends ConsumerStatefulWidget {
   static const route = ScreenPaths.debtorsListScreen;
@@ -17,6 +18,7 @@ class DebtorListPage extends ConsumerStatefulWidget {
 
 class _DebtorListPageState extends ConsumerState<DebtorListPage> {
   final spacer = SizedBox(height: 5.0.h);
+  double sumOfDebts = 0;
 
   @override
   void initState() {
@@ -37,6 +39,9 @@ class _DebtorListPageState extends ConsumerState<DebtorListPage> {
           List<Debt> debtData = [];
           if (state is DebtListSuccess) {
             debtData = state.listOfDebts;
+            //updated sum of debts
+            sumOfDebts = debtData.fold(
+                0, (previousValue, element) => previousValue + element.amount);
           } else if (state is DebtListFailure) {
             AppSnackbar(
               context,
@@ -52,9 +57,10 @@ class _DebtorListPageState extends ConsumerState<DebtorListPage> {
                   children: [
                     const Text('Total Debts'),
                     spacer,
-                    const Text(
-                      'N30,000,',
-                      style: TextStyle(
+                    Text(
+                      NumberFormat.simpleCurrency(name: 'NGN').currencySymbol +
+                          sumOfDebts.toStringAsFixed(2),
+                      style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),

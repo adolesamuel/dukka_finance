@@ -1,5 +1,7 @@
+import 'package:dukka_finance/configs/navigator.dart';
 import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:dukka_finance/constants/helpful_functions.dart';
+import 'package:dukka_finance/features/debtors/app/page/debt_detail_page.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:dukka_finance/features/debtors/models/transaction.dart';
 import 'package:flutter/material.dart';
@@ -44,12 +46,12 @@ class DebtorsListTile extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         onTap: () {
-          // navigate(
-          //   context,
-          //   TransactionDetailPage(
-          //     transaction: transaction,
-          //   ),
-          // );
+          navigate(
+            context,
+            DebtDetailPage(
+              debt: debt,
+            ),
+          );
         },
         leading: SizedBox(
           child: Stack(

@@ -1,27 +1,26 @@
 import 'package:dukka_finance/constants/app_colors.dart';
-import 'package:dukka_finance/features/debtors/models/transaction.dart';
+import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-class TransactionDetailPage extends StatefulWidget {
-  final Activity transaction;
-  const TransactionDetailPage({
+class DebtDetailPage extends StatefulWidget {
+  final Debt debt;
+  const DebtDetailPage({
     super.key,
-    required this.transaction,
+    required this.debt,
   });
 
   @override
-  State<TransactionDetailPage> createState() => _TransactionDetailPageState();
+  State<DebtDetailPage> createState() => _DebtDetailPageState();
 }
 
-class _TransactionDetailPageState extends State<TransactionDetailPage> {
-  late Activity transaction;
-
+class _DebtDetailPageState extends State<DebtDetailPage> {
+  late Debt debt;
   @override
   void initState() {
     super.initState();
-    transaction = widget.transaction;
+    debt = widget.debt;
   }
 
   @override
@@ -33,7 +32,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       appBar: AppBar(
         title: Text(
           format.format(
-            transaction.date,
+            debt.date,
           ),
           style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
         ),
@@ -47,11 +46,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           children: [
             SizedBox(
               height: 50.0.h,
-            ), //Description
+            ),
+            //Description
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
-                transaction.description,
+                debt.description,
                 style: const TextStyle(fontSize: 30.0, color: Colors.black),
               ),
             ),
@@ -65,14 +65,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    transaction.type == ActivityType.debit ? 'To' : 'From',
-                    style: const TextStyle(color: Colors.white, fontSize: 15.0),
+                  const Text(
+                    'To',
+                    style: TextStyle(color: Colors.white, fontSize: 15.0),
                   ),
                   Text(
-                    transaction.type == ActivityType.debit
-                        ? transaction.receiver
-                        : transaction.sender,
+                    debt.receiver,
                     style: const TextStyle(color: Colors.white, fontSize: 30.0),
                   ),
                 ],
@@ -80,12 +78,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             ),
 
             //Income/Expense
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
-                transaction.type.name.toString()[0].toUpperCase() +
-                    transaction.type.name.toString().substring(1),
-                style: const TextStyle(fontSize: 30.0, color: Colors.black),
+                'Borrowed',
+                style: TextStyle(fontSize: 30.0, color: Colors.black),
               ),
             ),
 
@@ -98,7 +95,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   style: const TextStyle(fontSize: 18.0, color: Colors.black),
                 ),
                 Text(
-                  transaction.amount.toStringAsFixed(2),
+                  debt.amount.toStringAsFixed(2),
                   style: const TextStyle(
                       fontSize: 30.0,
                       color: Colors.black,

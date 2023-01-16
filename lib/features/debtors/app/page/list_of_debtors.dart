@@ -39,9 +39,13 @@ class _DebtorListPageState extends ConsumerState<DebtorListPage> {
           List<Debt> debtData = [];
           if (state is DebtListSuccess) {
             debtData = state.listOfDebts;
-            //updated sum of debts
-            sumOfDebts = debtData.fold(
-                0, (previousValue, element) => previousValue + element.amount);
+            //updated sum of debts not paid
+            sumOfDebts = debtData.fold(0, (previousValue, element) {
+              if (!element.isPaid) {
+                return previousValue + element.amount;
+              }
+              return previousValue;
+            });
           } else if (state is DebtListFailure) {
             AppSnackbar(
               context,

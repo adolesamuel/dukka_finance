@@ -3,6 +3,7 @@ import 'package:dukka_finance/features/common/button_widget.dart';
 import 'package:dukka_finance/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DebtorListPage extends StatefulWidget {
   static const route = ScreenPaths.debtorsListScreen;
@@ -13,6 +14,8 @@ class DebtorListPage extends StatefulWidget {
 }
 
 class _DebtorListPageState extends State<DebtorListPage> {
+  final spacer = SizedBox(height: 5.0.h);
+
   @override
   void initState() {
     super.initState();
@@ -24,17 +27,33 @@ class _DebtorListPageState extends State<DebtorListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, ref, child) {
-      return Scaffold(
-        body: Center(
-          child: AppButton(
-            onPressed: () {
-              ref.read(authStateProvider.notifier).signOut();
-            },
-            text: 'Sign Out',
+    return Scaffold(
+      body: Center(
+        child: SizedBox.expand(
+          child: Column(
+            children: [
+              const Text('Total Debts'),
+              spacer,
+              const Text(
+                'N30,000,',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              spacer,
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) => ListTile(
+                    onTap: () {},
+                  ),
+                ),
+              )
+            ],
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }

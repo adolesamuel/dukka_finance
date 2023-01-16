@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/core/failures/failure.dart';
-import 'package:dukka_finance/features/debtors/models/debtor.dart';
+import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final debtorsRepository =
     Provider<DebtorsRepository>((ref) => DebtorsRepositoryImpl());
 
-abstract class DebtorsRepository with DataBaseMethods<Debtor> {}
+abstract class DebtorsRepository with DataBaseMethods<Debt> {}
 
 class DebtorsRepositoryImpl implements DebtorsRepository {
   final ref = FirebaseFirestore.instance.collection('debtors');
@@ -15,7 +15,7 @@ class DebtorsRepositoryImpl implements DebtorsRepository {
   DebtorsRepositoryImpl();
 
   @override
-  Future<Either<Failure, bool>> addItem(Debtor t) {
+  Future<Either<Failure, bool>> addItem(Debt t) {
     return ref
         .add(t.toJson())
         .then((value) => const Right<Failure, bool>(true))
@@ -24,7 +24,7 @@ class DebtorsRepositoryImpl implements DebtorsRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteItem(Debtor t) {
+  Future<Either<Failure, bool>> deleteItem(Debt t) {
     return ref
         .doc(t.id)
         .delete()
@@ -34,19 +34,18 @@ class DebtorsRepositoryImpl implements DebtorsRepository {
   }
 
   @override
-  Stream<Either<Failure, List<Debtor>>> getStream() async* {
+  Stream<Either<Failure, List<Debt>>> getStream() async* {
     final data = ref.snapshots();
     yield* data.map((snapshot) {
-      final result =
-          snapshot.docs.map((e) => Debtor.fromJson(e.data())).toList();
+      final result = snapshot.docs.map((e) => Debt.fromJson(e.data())).toList();
 
-      return Right<Failure, List<Debtor>>(result);
+      return Right<Failure, List<Debt>>(result);
     }).handleError((error, stack) =>
         throw Left(CommonFailure('Error Stream', error.toString())));
   }
 
   @override
-  Future<Either<Failure, bool>> updateItem(Debtor t) {
+  Future<Either<Failure, bool>> updateItem(Debt t) {
     // TODO: implement updateItem
     throw UnimplementedError();
   }

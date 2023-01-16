@@ -32,8 +32,6 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final activityState = ref.watch(activityStateProvider);
-
     return SizedBox.expand(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +53,6 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
               DashboardData? dashboardData;
               if (state is DashboardDataState) {
                 dashboardData = state.data;
-                print(dashboardData.toJson());
               } else if (state is DashboardErrorState) {
                 AppSnackbar(
                   context,

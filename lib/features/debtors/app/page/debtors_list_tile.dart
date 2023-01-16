@@ -9,9 +9,11 @@ class DebtorsListTile extends StatelessWidget {
   const DebtorsListTile({super.key, required this.debt});
 
   Color _determineColor() {
-    final totalDays = debt.dueDate.difference(debt.date).inDays;
-    final daysElapsed = DateTime.now().difference(debt.date).inDays;
+    //
+    final totalDays = debt.dueDate.difference(debt.date).inDays + 1;
+    final daysElapsed = DateTime.now().difference(debt.date).inDays + 1;
     final fraction = daysElapsed / totalDays;
+
     if (fraction < 0.3) {
       return Colors.green;
     } else if (0.6 > fraction && fraction > 0.3) {
@@ -23,9 +25,10 @@ class DebtorsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalDays = debt.dueDate.difference(debt.date).inDays;
+    final totalDays = debt.dueDate.difference(debt.date).inDays + 1;
 
-    final daysElapsed = DateTime.now().difference(debt.date).inDays;
+    final daysElapsed = DateTime.now().difference(debt.date).inDays + 1;
+
     final fraction = daysElapsed / totalDays;
     return Card(
       margin: const EdgeInsets.all(8.0),

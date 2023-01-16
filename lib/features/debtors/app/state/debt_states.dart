@@ -31,3 +31,17 @@ class DebtListSuccess extends DebtState {
 
   DebtListSuccess(this.listOfDebts);
 }
+
+class DebtPaidLoading extends DebtState {}
+
+class DebtPaidFailure extends DebtState {
+  final Failure failure;
+
+  DebtPaidFailure(this.failure);
+}
+
+class DebtPaidSuccess extends DebtState {
+  final bool status;
+
+  DebtPaidSuccess(this.status);
+}

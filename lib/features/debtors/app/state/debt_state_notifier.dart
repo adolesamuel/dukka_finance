@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/core/failures/failure.dart';
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/debtors/data/repository/repository.dart';
@@ -37,5 +38,17 @@ class DebtNotifier extends StateNotifier<DebtState> {
         (r) => DebtListSuccess(r),
       );
     });
+  }
+
+  Future<void> hasPaidDebt(Debt debt) async {
+    state = DebtPaidLoading();
+
+    final paidOrError =
+        await _debtorsRepository.hasPaid(debt, AppUserManager.user);
+
+    state = paidOrError.fold(
+      (l) => DebtPaidFailure(l),
+      (r) => DebtPaidSuccess(r),
+    );
   }
 }

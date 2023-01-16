@@ -13,6 +13,7 @@ final debtorsRepositoryProvider =
 abstract class DebtorsRepository {
   Future<Either<Failure, bool>> addItem(Debt t, AppUser user);
   Stream<Either<Failure, List<Debt>>> streamDebts(AppUser user);
+  Future<Either<Failure, bool>> hasPaid(Debt debt, AppUser user);
 }
 
 class DebtorsRepositoryImpl implements DebtorsRepository {
@@ -52,6 +53,14 @@ class DebtorsRepositoryImpl implements DebtorsRepository {
     }).handleError((error, stack) {
       return Left(CommonFailure('Error', error.toString()));
     });
+  }
+
+  @override
+  Future<Either<Failure, bool>> hasPaid(Debt debt, AppUser user) async {
+    ServiceRunner<Failure, bool> sR = ServiceRunner(networkInfo);
+
+    return sR.tryRemoteandCatch(
+        call: dataBase.hasPaidDebt(user, debt), errorTitle: 'Error');
   }
 
   // @override

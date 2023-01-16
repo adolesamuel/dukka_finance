@@ -1,11 +1,13 @@
 import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_send_email_bottom_sheet.dart';
+import 'package:dukka_finance/features/debtors/app/state/debt_state_notifier.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-class DebtDetailPage extends StatefulWidget {
+class DebtDetailPage extends ConsumerStatefulWidget {
   final Debt debt;
   const DebtDetailPage({
     super.key,
@@ -13,10 +15,10 @@ class DebtDetailPage extends StatefulWidget {
   });
 
   @override
-  State<DebtDetailPage> createState() => _DebtDetailPageState();
+  ConsumerState<DebtDetailPage> createState() => _DebtDetailPageState();
 }
 
-class _DebtDetailPageState extends State<DebtDetailPage> {
+class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
   late Debt debt;
 
   final space = SizedBox(
@@ -173,7 +175,14 @@ class _DebtDetailPageState extends State<DebtDetailPage> {
                                 fontWeight: FontWeight.w300),
                           )),
                       OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDebtPaidDialog(context, debt, onSelectYes: () {
+                              ref
+                                  .read(debtStateProvider.notifier)
+                                  .hasPaidDebt(debt);
+                              Navigator.pop(context);
+                            });
+                          },
                           child: const Text(
                             'Has Paid?',
                             style: TextStyle(

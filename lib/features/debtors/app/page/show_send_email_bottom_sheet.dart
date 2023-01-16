@@ -3,6 +3,7 @@ import 'package:dukka_finance/features/services/contact_user_services/make_phone
 import 'package:dukka_finance/features/services/contact_user_services/send_email.dart';
 import 'package:dukka_finance/features/services/contact_user_services/send_sms.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 showReminderBottomSheet(BuildContext context, Debt debt) {
@@ -54,4 +55,38 @@ showReminderBottomSheet(BuildContext context, Debt debt) {
       );
     },
   );
+}
+
+showDebtPaidDialog(
+  BuildContext context,
+  Debt debt, {
+  void Function()? onSelectYes,
+}) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+          content: Text(
+            'Confirm Has Paid?',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          actions: [
+            TextButton(
+              onPressed: onSelectYes,
+              child: const Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'No',
+                style: TextStyle(color: Colors.red),
+              ),
+            )
+          ],
+        );
+      });
 }

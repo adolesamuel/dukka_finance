@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
@@ -10,6 +9,8 @@ class FirestorePath {
   static String dashboardData(String uid) => 'dashboard/$uid';
   static String transactionData(String uid) => 'users/$uid/transactions';
   static String debtorsData(String uid) => 'users/$uid/debts';
+  static String debtData(String uid, String debtId) =>
+      'users/$uid/debts/$debtId';
 }
 
 final appDatabaseProvider =
@@ -73,7 +74,9 @@ class AppDataBase {
   Future<bool> addDebt(AppUser user, Debt debt) async {
     final collection = ref.collection(FirestorePath.debtorsData(user.uid));
 
-    await collection.add(debt.toJson());
+    await collection
+        .add(debt.toJson())
+        .then((value) => value.update({'id': value.id}));
 
     await addTransaction(user, debt.toActivity());
 
@@ -87,9 +90,23 @@ class AppDataBase {
         .map((snapshot) => snapshot.docs.map((item) => item.data()).toList());
   }
 
-  // Future<bool> hasPaidDebt(AppUser user, Debt debt) async {
-  //   final collection = ref.collection(FirestorePath.debtorsData(user.uid));
+  Future<bool> hasPaidDebt(AppUser user, Debt debt) async {
+    final debtRef = ref.doc(FirestorePath.debtData(user.uid, debt.id));
 
-  //   collection.where("id",isEqualTo: debt.id,).
-  // }
+    //Update debt is paid.
+    debtRef.update({'is_paid': true});
+
+    final paidDebt = debt.toActivity().copyWith(
+          sender: debt.receiver,
+          receiver: debt.sender,
+          type: ActivityType.credit,
+          date: DateTime.now(),
+          description: 'Paid Debt for ${debt.description}',
+        );
+
+    //add entry as activity
+    addTransaction(user, paidDebt);
+
+    return true;
+  }
 }

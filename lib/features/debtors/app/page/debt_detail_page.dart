@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:dukka_finance/features/common/app_snackbar.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_delete_dialog.dart';
@@ -181,14 +182,23 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                     children: [
                       OutlinedButton(
                           onPressed: () {
-                            showReminderBottomSheet(context, debt)
-                                .then((value) {
-                              if (value != null && value == true) {
-                                ref
-                                    .read(debtStateProvider.notifier)
-                                    .updateLastCallDate(debt);
-                              }
-                            });
+                            if ((debt.receiverEmail?.isEmpty ?? false) &&
+                                (debt.receiverPhoneNumber?.isEmpty ?? false)) {
+                              AppSnackbar(
+                                context,
+                                isError: true,
+                                text: 'Update Debtor Contact Information',
+                              ).show();
+                            } else {
+                              showReminderBottomSheet(context, debt)
+                                  .then((value) {
+                                if (value != null && value == true) {
+                                  ref
+                                      .read(debtStateProvider.notifier)
+                                      .updateLastCallDate(debt);
+                                }
+                              });
+                            }
                           },
                           child: const Text(
                             'Ask for It?',

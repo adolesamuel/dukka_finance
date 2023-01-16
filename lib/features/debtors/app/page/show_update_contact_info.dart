@@ -1,4 +1,3 @@
-import 'package:dukka_finance/constants/helpful_functions.dart';
 import 'package:dukka_finance/features/common/app_snackbar.dart';
 import 'package:dukka_finance/features/common/button_widget.dart';
 import 'package:dukka_finance/features/common/loading_widget.dart';
@@ -57,8 +56,6 @@ Future<bool?> showUpdateContactInfoModal(
                           width: 300.w,
                           controller: emailController,
                           textInputAction: TextInputAction.next,
-                          validator: (value) =>
-                              validator(value, Validator.email),
                           hintText: 'Email',
                         ),
                         space,
@@ -66,8 +63,6 @@ Future<bool?> showUpdateContactInfoModal(
                           width: 300.w,
                           controller: phoneController,
                           textInputAction: TextInputAction.next,
-                          validator: (value) =>
-                              validator(value, Validator.phoneNumber),
                           hintText: 'Phone Number',
                         ),
                         space,

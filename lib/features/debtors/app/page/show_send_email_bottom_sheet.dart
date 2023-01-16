@@ -18,39 +18,42 @@ Future<bool?> showReminderBottomSheet(BuildContext context, Debt debt) async {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                width: 200.0.w,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    sendEmail(debt)
-                        .then((value) => Navigator.pop(context, value));
-                  },
-                  label: const Text('Send Email'),
-                  icon: const Icon(Icons.email),
+              if (debt.receiverEmail?.isNotEmpty ?? false)
+                SizedBox(
+                  width: 200.0.w,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      sendEmail(debt)
+                          .then((value) => Navigator.pop(context, value));
+                    },
+                    label: const Text('Send Email'),
+                    icon: const Icon(Icons.email),
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 200.0.w,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    sendSms(debt)
-                        .then((value) => Navigator.pop(context, value));
-                  },
-                  label: const Text('Send Message'),
-                  icon: const Icon(Icons.message),
+              if (debt.receiverPhoneNumber?.isNotEmpty ?? false)
+                SizedBox(
+                  width: 200.0.w,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      sendSms(debt)
+                          .then((value) => Navigator.pop(context, value));
+                    },
+                    label: const Text('Send Message'),
+                    icon: const Icon(Icons.message),
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 200.0.w,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    makePhoneCall(debt)
-                        .then((value) => Navigator.pop(context, value));
-                  },
-                  label: const Text('Make Phone Call'),
-                  icon: const Icon(Icons.phone),
+              if (debt.receiverPhoneNumber?.isNotEmpty ?? false)
+                SizedBox(
+                  width: 200.0.w,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      makePhoneCall(debt)
+                          .then((value) => Navigator.pop(context, value));
+                    },
+                    label: const Text('Make Phone Call'),
+                    icon: const Icon(Icons.phone),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

@@ -4,7 +4,9 @@ import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
 import 'package:dukka_finance/features/debtors/app/page/create_debt_page.dart';
 import 'package:dukka_finance/features/debtors/app/page/list_of_debtors.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
+import 'package:dukka_finance/features/transactions/app/pages/add_transaction_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -54,12 +56,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
           SettingsPage(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add Transaction',
-        onPressed: () {
-          navigate(context, const CreateDebtPage());
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: SpeedDial(
+        overlayColor: Colors.black12,
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        children: [
+          SpeedDialChild(
+              onTap: () {
+                navigate(context, const AddTransactionPage());
+              },
+              label: 'Add Transaction',
+              child: const Icon(Icons.add)),
+          SpeedDialChild(
+              onTap: () {
+                navigate(context, const CreateDebtPage());
+              },
+              label: 'Add Debtors',
+              child: const Icon(Icons.add)),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

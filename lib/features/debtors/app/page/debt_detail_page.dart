@@ -220,7 +220,7 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                     Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             OutlinedButton(
                                 onPressed: () {
@@ -250,6 +250,9 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                                       color: Colors.red,
                                       fontWeight: FontWeight.w300),
                                 )),
+                            SizedBox(
+                              width: 40.0.w,
+                            ),
                             OutlinedButton(
                               onPressed: () {
                                 showDebtPaidDialog(context, debt,
@@ -271,7 +274,7 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             OutlinedButton(
                                 onPressed: () {
@@ -291,7 +294,7 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
 
                   //Delete Button
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       OutlinedButton(
                           onPressed: () {

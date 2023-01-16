@@ -109,4 +109,50 @@ class AppDataBase {
 
     return true;
   }
+
+  Future<bool> updateContactInfo(
+    AppUser user,
+    Debt debt, {
+    String? email,
+    String? phone,
+  }) async {
+    final debtRef = ref.doc(FirestorePath.debtData(user.uid, debt.id));
+
+    if (email != null) {
+      debtRef.update({'receiver_email': email});
+    }
+    if (phone != null) {
+      debtRef.update({'receiver_phone_number': phone});
+    }
+    return true;
+  }
+
+  Future<bool> updateLastContactInfo(
+    AppUser user,
+    Debt debt,
+  ) async {
+    final debtRef = ref.doc(FirestorePath.debtData(user.uid, debt.id));
+
+    final lastContactDate = DateTime.now().toIso8601String();
+
+    debtRef.update({'last_contact_date': lastContactDate});
+    return true;
+  }
+
+  Future<bool> deleteDebt(
+    AppUser user,
+    Debt debt,
+  ) async {
+    final debtRef = ref.doc(FirestorePath.debtData(user.uid, debt.id));
+
+    debtRef.delete();
+    return true;
+  }
+
+  Stream<Map<String, dynamic>?> streamDebtDetailData(
+      AppUser user, Debt debt) async* {
+    final debtRef = ref.doc(FirestorePath.debtData(user.uid, debt.id));
+
+    yield* debtRef.snapshots().map((event) => event.data());
+  }
 }

@@ -13,7 +13,13 @@ final debtorsRepositoryProvider =
 abstract class DebtorsRepository {
   Future<Either<Failure, bool>> addItem(Debt t, AppUser user);
   Stream<Either<Failure, List<Debt>>> streamDebts(AppUser user);
+  Stream<Either<Failure, Debt?>> streamDebtDetail(AppUser user, Debt debt);
   Future<Either<Failure, bool>> hasPaid(Debt debt, AppUser user);
+
+  Future<Either<Failure, bool>> updateContactInfo(Debt debt, AppUser user,
+      {String? email, String? phone});
+  Future<Either<Failure, bool>> updateLastCallDate(Debt debt, AppUser user);
+  Future<Either<Failure, bool>> deleteDebt(Debt debt, AppUser user);
 }
 
 class DebtorsRepositoryImpl implements DebtorsRepository {
@@ -30,16 +36,6 @@ class DebtorsRepositoryImpl implements DebtorsRepository {
     return sR.tryRemoteandCatch(
         call: dataBase.addDebt(user, t), errorTitle: 'Error');
   }
-
-  // @override
-  // Future<Either<Failure, bool>> deleteItem(Debt t) {
-  //   return ref
-  //       .doc(t.id)
-  //       .delete()
-  //       .then((value) => const Right<Failure, bool>(true))
-  //       .catchError((error, stack) =>
-  //           throw Left(CommonFailure('Delete Error', error.toString())));
-  // }
 
   @override
   Stream<Either<Failure, List<Debt>>> streamDebts(AppUser user) async* {
@@ -63,9 +59,40 @@ class DebtorsRepositoryImpl implements DebtorsRepository {
         call: dataBase.hasPaidDebt(user, debt), errorTitle: 'Error');
   }
 
-  // @override
-  // Future<Either<Failure, bool>> updateItem(Debt t) {
-  //   // TODO: implement updateItem
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<Either<Failure, bool>> deleteDebt(Debt debt, AppUser user) {
+    ServiceRunner<Failure, bool> sR = ServiceRunner(networkInfo);
+    return sR.tryRemoteandCatch(
+        call: dataBase.deleteDebt(user, debt), errorTitle: 'Error');
+  }
+
+  @override
+  Stream<Either<Failure, Debt?>> streamDebtDetail(
+      AppUser user, Debt debt) async* {
+    yield* dataBase.streamDebtDetailData(user, debt).map((event) {
+      if (event == null) {
+        return const Right<Failure, Debt?>(null);
+      }
+      return Right<Failure, Debt>(Debt.fromJson(event));
+    }).handleError((error, stack) {
+      return Left(CommonFailure('Error', error.toString()));
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateContactInfo(Debt debt, AppUser user,
+      {String? email, String? phone}) {
+    ServiceRunner<Failure, bool> sR = ServiceRunner(networkInfo);
+    return sR.tryRemoteandCatch(
+        call:
+            dataBase.updateContactInfo(user, debt, email: email, phone: phone),
+        errorTitle: 'Error');
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateLastCallDate(Debt debt, AppUser user) {
+    ServiceRunner<Failure, bool> sR = ServiceRunner(networkInfo);
+    return sR.tryRemoteandCatch(
+        call: dataBase.updateLastContactInfo(user, debt), errorTitle: 'Error');
+  }
 }

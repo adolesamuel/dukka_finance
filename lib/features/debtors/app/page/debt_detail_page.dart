@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/constants/app_colors.dart';
 import 'package:dukka_finance/features/common/app_snackbar.dart';
+import 'package:dukka_finance/features/debtors/app/page/debt_glow_icon.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_delete_dialog.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_send_email_bottom_sheet.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_update_contact_info.dart';
@@ -93,26 +94,42 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                     ),
                   ),
                   //Receiver/Sender.
-                  Container(
-                    padding: const EdgeInsets.all(20.0),
-                    margin: EdgeInsets.zero,
-                    decoration: BoxDecoration(
-                        color: AppColors.authAppBarBgColor,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'To',
-                          style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20.0),
+                        margin: EdgeInsets.zero,
+                        decoration: BoxDecoration(
+                            color: AppColors.authAppBarBgColor,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'To',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 15.0),
+                            ),
+                            Text(
+                              debt.receiver,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 30.0),
+                            ),
+                          ],
                         ),
-                        Text(
-                          debt.receiver,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 30.0),
+                      ),
+                      SizedBox(
+                        width: 250.0.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            DebtGlowIcon(
+                              debt: debt,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
 
                   //Income/Expense
@@ -146,6 +163,7 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                   space,
                   if (!debt.isPaid)
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),

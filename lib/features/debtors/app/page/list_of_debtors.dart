@@ -1,4 +1,5 @@
 import 'package:dukka_finance/features/common/app_snackbar.dart';
+import 'package:dukka_finance/features/common/empty_widget.dart';
 import 'package:dukka_finance/features/debtors/app/page/debtors_list_tile.dart';
 import 'package:dukka_finance/features/debtors/app/state/debt_state_notifier.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
@@ -19,15 +20,6 @@ class DebtorListPage extends ConsumerStatefulWidget {
 class _DebtorListPageState extends ConsumerState<DebtorListPage> {
   final spacer = SizedBox(height: 5.0.h);
   double sumOfDebts = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      //Call list of widgets here
-      //or use it to listen to the list of debtors.
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +62,18 @@ class _DebtorListPageState extends ConsumerState<DebtorListPage> {
                       ),
                     ),
                     spacer,
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: debtData.length,
-                        itemBuilder: (context, index) =>
-                            DebtorsListTile(debt: debtData[index]),
-                      ),
-                    )
+                    if (debtData.isEmpty)
+                      const EmptyWidget(
+                          message:
+                              'No Debt Data Present\n Add Debtors to Proceed')
+                    else
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: debtData.length,
+                          itemBuilder: (context, index) =>
+                              DebtorsListTile(debt: debtData[index]),
+                        ),
+                      )
                   ],
                 ),
               ),

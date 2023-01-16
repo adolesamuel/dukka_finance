@@ -1,4 +1,5 @@
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
+import 'package:dukka_finance/features/common/empty_widget.dart';
 import 'package:dukka_finance/features/common/loading_widget.dart';
 import 'package:dukka_finance/features/debtors/models/transaction.dart';
 import 'package:dukka_finance/features/transactions/app/pages/transcation_list_tile.dart';
@@ -70,15 +71,18 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  //TODO handle empty List
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: dataList.length,
-                      itemBuilder: (context, index) => TransactionListTile(
-                        transaction: dataList[index],
+                  if (dataList.isEmpty)
+                    const EmptyWidget(
+                        message: 'No Transactions Present\n Add Transactions')
+                  else
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: dataList.length,
+                        itemBuilder: (context, index) => TransactionListTile(
+                          transaction: dataList[index],
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             );

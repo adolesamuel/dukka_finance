@@ -16,7 +16,9 @@ class DebtorsListTile extends StatelessWidget {
     final daysElapsed = DateTime.now().difference(debt.date).inDays + 1;
     final fraction = daysElapsed / totalDays;
 
-    if (fraction < 0.3) {
+    if (debt.isPaid) {
+      return Colors.blue;
+    } else if (fraction < 0.3) {
       return Colors.green;
     } else if (0.6 > fraction && fraction > 0.3) {
       return Colors.yellow;
@@ -61,7 +63,11 @@ class DebtorsListTile extends StatelessWidget {
                 height: 46,
                 width: 46,
                 child: CircularProgressIndicator(
-                  value: fraction > 1 ? 1 : fraction,
+                  value: debt.isPaid
+                      ? 1
+                      : fraction > 1
+                          ? 1
+                          : fraction,
                   color: _determineColor(),
                 ),
               ),
@@ -101,7 +107,7 @@ class DebtorsListTile extends StatelessWidget {
           debt.amount.toCurrency(),
           maxLines: 1,
           style: TextStyle(
-            color: debt.type == ActivityType.debit ? Colors.red : Colors.green,
+            color: debt.isPaid ? Colors.green : Colors.red,
             fontWeight: FontWeight.w300,
             fontSize: 22.0,
           ),

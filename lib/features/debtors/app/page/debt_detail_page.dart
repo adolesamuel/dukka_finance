@@ -1,4 +1,5 @@
 import 'package:dukka_finance/constants/app_colors.dart';
+import 'package:dukka_finance/features/debtors/app/page/show_delete_dialog.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_send_email_bottom_sheet.dart';
 import 'package:dukka_finance/features/debtors/app/page/show_update_contact_info.dart';
 import 'package:dukka_finance/features/debtors/app/state/debt_state_notifier.dart';
@@ -225,7 +226,12 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDeleteDialog(context, debt, onSelectYes: () {
+                        ref.read(debtStateProvider.notifier).deleteDebt(debt);
+                        Navigator.pop(context);
+                      });
+                    },
                     child: const Text(
                       'Delete!',
                       style: TextStyle(

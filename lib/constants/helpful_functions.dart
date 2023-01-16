@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'dart:async';
+
+import 'package:intl/intl.dart';
 
 class Debouncer {
   final int milliseconds;
@@ -66,4 +70,16 @@ enum Validator {
   password,
   confirmPassword,
   normal,
+}
+
+extension Currency on num {
+  //Can be updated to
+  //auto detect the currency to be used.
+  String toCurrency() {
+    return NumberFormat.compactSimpleCurrency(
+      locale: Platform.localeName,
+      name: "NGN",
+      decimalDigits: 2,
+    ).format(this);
+  }
 }

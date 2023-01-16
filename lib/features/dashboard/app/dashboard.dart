@@ -1,7 +1,9 @@
+import 'package:dukka_finance/configs/navigator.dart';
 import 'package:dukka_finance/features/common/profile_icon.dart';
 import 'package:dukka_finance/features/common/search_icon.dart';
 import 'package:dukka_finance/features/dashboard/app/dashboard_content.dart';
 import 'package:dukka_finance/features/settings/settings.dart';
+import 'package:dukka_finance/features/transactions/app/pages/add_transaction_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -15,13 +17,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
   PageController pageController = PageController();
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onNavItemTapped(int index) {
+    _selectedIndex = index;
+
     pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.easeIn,
     );
   }
@@ -30,9 +31,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: ProfileIcon(
           onPressed: () {
-            _onItemTapped(2);
+            _onNavItemTapped(2);
           },
         ),
         title: const Text(
@@ -58,12 +60,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        tooltip: 'Add Transaction',
+        onPressed: () {
+          navigate(context, const AddTransactionPage());
+        },
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: _onNavItemTapped,
         // iconSize: 40,
         // showSelectedLabels: false,
         // showUnselectedLabels: false,

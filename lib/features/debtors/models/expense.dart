@@ -4,16 +4,15 @@ import 'package:json_annotation/json_annotation.dart';
 part 'expense.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class Expense extends Transaction {
+class Expense extends Activity {
   Expense(
       {required super.id,
-      required super.name,
       required super.date,
       required super.amount,
       required super.description,
       required super.sender,
       required super.receiver})
-      : super(type: TransactionType.debit);
+      : super(type: ActivityType.debit);
 
   factory Expense.fromJson(Map<String, dynamic> json) =>
       _$ExpenseFromJson(json);

@@ -83,6 +83,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     return Scaffold(
       backgroundColor: AppColors.authScaffoldBgColor,
       appBar: AppBar(
+        foregroundColor: Colors.white,
         backgroundColor: AppColors.authAppBarBgColor,
       ),
       body: Padding(

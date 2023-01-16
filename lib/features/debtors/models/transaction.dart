@@ -3,19 +3,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'transaction.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class Transaction {
+class Activity {
   final String id;
-  final String name;
   final String sender;
   final String receiver;
-  final TransactionType type;
+  final ActivityType type;
   final DateTime date;
   final double amount;
   final String description;
 
-  Transaction({
+  Activity({
     required this.id,
-    required this.name,
     required this.type,
     required this.date,
     required this.amount,
@@ -24,13 +22,13 @@ class Transaction {
     required this.receiver,
   });
 
-  factory Transaction.fromJson(Map<String, dynamic> json) =>
+  factory Activity.fromJson(Map<String, dynamic> json) =>
       _$TransactionFromJson(json);
 
   Map<String, dynamic> toJson() => _$TransactionToJson(this);
 }
 
-enum TransactionType {
+enum ActivityType {
   credit,
   debit,
 }

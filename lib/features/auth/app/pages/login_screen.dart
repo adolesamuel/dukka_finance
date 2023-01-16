@@ -64,6 +64,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Scaffold(
       backgroundColor: AppColors.authScaffoldBgColor,
       appBar: AppBar(
+        foregroundColor: Colors.white,
         backgroundColor: AppColors.authAppBarBgColor,
       ),
       body: Padding(

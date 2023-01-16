@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dukka_finance/constants/helpful_functions.dart';
 import 'package:dukka_finance/features/common/textfield_widgets.dart';
+import 'package:dukka_finance/features/debtors/app/page/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
@@ -16,14 +17,27 @@ class CreateDebtPage extends StatefulWidget {
 class _CreateDebtPageState extends State<CreateDebtPage> {
   final _formKey = GlobalKey<FormState>();
 
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  //TODO Add Date Picker.
+
   final space = SizedBox(
     height: 30.0.h,
   );
 
-  getContact() async {
+  Future<void> _getContact() async {
     if (Platform.isIOS) {
     } else if (Platform.isAndroid) {
       final FullContact contact = await FlutterContactPicker.pickFullContact();
+      emailController.text = contact.emails[0].email ?? '';
+      phoneController.text = contact.phones[0].number ?? '';
+      nameController.text = (contact.name?.firstName ?? '') +
+          (contact.name?.middleName ?? '') +
+          (contact.name?.lastName ?? '');
     }
   }
 
@@ -34,56 +48,76 @@ class _CreateDebtPageState extends State<CreateDebtPage> {
       body: Form(
         key: _formKey,
         child: Center(
-          child: Column(
-            children: [
-              //Name
-              TextFieldBox(
-                // controller: nameController,
-                textInputAction: TextInputAction.next,
-                validator: (value) => validator(value, Validator.normal),
-                // hintText: activityType == ActivityType.credit
-                //     ? 'Sender Name'
-                //     : 'Reciever Name',
-              ),
-              space,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //Name
+                TextFieldBox(
+                  controller: nameController,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) => validator(value, Validator.normal),
+                  hintText: 'Name',
+                ),
+                space,
+                TextFieldBox(
+                  controller: emailController,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) => validator(value, Validator.email),
+                  hintText: 'Email',
+                ),
+                space,
+                TextFieldBox(
+                  controller: phoneController,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) => validator(value, Validator.phoneNumber),
+                  hintText: 'Phone Number',
+                ),
+                space,
 
-              //Description
-              TextFieldBox(
-                hintText: 'Description',
-                // controller: descController,
-                textInputAction: TextInputAction.next,
-                validator: (value) => validator(value, Validator.normal),
-              ),
+                //Description
+                TextFieldBox(
+                  hintText: 'Description',
+                  // controller: descController,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) => validator(value, Validator.normal),
+                ),
+                space,
+                BuildDatePicker(
+                  onSelectDate: (date) {},
+                ),
 
-              space,
-              //amount
-              TextFieldBox(
-                hintText: 'Amount',
-                // controller: amountController,
-                textInputAction: TextInputAction.done,
-                validator: (value) => validator(value, Validator.normal),
-                // onEditingComplete: _handleAddTransaction,
-              ),
-              space,
+                space,
+                //amount
+                TextFieldBox(
+                  hintText: 'Amount',
+                  // controller: amountController,
+                  textInputAction: TextInputAction.done,
+                  validator: (value) => validator(value, Validator.normal),
+                  // onEditingComplete: _handleAddTransaction,
+                ),
+                space,
 
-              //Get Debtor from Contacts.
-              TextButton.icon(
-                onPressed: () {},
-                label: const Text('Add From Contacts'),
-                icon: const Icon(Icons.person_add),
-              ),
+                //Get Debtor from Contacts.
+                TextButton.icon(
+                  onPressed: () async {
+                    await _getContact();
+                  },
+                  label: const Text('Add From Contacts'),
+                  icon: const Icon(Icons.person_add),
+                ),
 
-              // if (state is AddTransactionLoadingState)
-              //   const LoadingWidget()
-              // else
-              //   AppButton(
-              //     text: 'Add Transaction',
-              //     onPressed: _handleAddTransaction,
-              //   ),
-              SizedBox(
-                height: 10.0.h,
-              )
-            ],
+                // if (state is AddTransactionLoadingState)
+                //   const LoadingWidget()
+                // else
+                //   AppButton(
+                //     text: 'Add Transaction',
+                //     onPressed: _handleAddTransaction,
+                //   ),
+                SizedBox(
+                  height: 10.0.h,
+                )
+              ],
+            ),
           ),
         ),
       ),

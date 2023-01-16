@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/dashboard/data/model/dashboard_data.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
@@ -85,4 +86,10 @@ class AppDataBase {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((item) => item.data()).toList());
   }
+
+  // Future<bool> hasPaidDebt(AppUser user, Debt debt) async {
+  //   final collection = ref.collection(FirestorePath.debtorsData(user.uid));
+
+  //   collection.where("id",isEqualTo: debt.id,).
+  // }
 }

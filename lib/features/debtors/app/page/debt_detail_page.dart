@@ -1,4 +1,5 @@
 import 'package:dukka_finance/constants/app_colors.dart';
+import 'package:dukka_finance/features/debtors/app/page/show_send_email_bottom_sheet.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -161,7 +162,9 @@ class _DebtDetailPageState extends State<DebtDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showReminderBottomSheet(context, debt);
+                          },
                           child: const Text(
                             'Ask for It?',
                             style: TextStyle(

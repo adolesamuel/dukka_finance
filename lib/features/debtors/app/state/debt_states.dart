@@ -45,3 +45,59 @@ class DebtPaidSuccess extends DebtState {
 
   DebtPaidSuccess(this.status);
 }
+
+class DebtDetailLoading extends DebtState {}
+
+class DebtDetailFailure extends DebtState {
+  final Failure failure;
+
+  DebtDetailFailure(this.failure);
+}
+
+class DebtDetailSuccess extends DebtState {
+  final Debt? debt;
+
+  DebtDetailSuccess(this.debt);
+}
+
+class UpdateContactInfoLoading extends DebtState {}
+
+class UpdateContactInfoFailure extends DebtState {
+  final Failure failure;
+
+  UpdateContactInfoFailure(this.failure);
+}
+
+class UpdateContactInfoSuccess extends DebtState {
+  final bool status;
+
+  UpdateContactInfoSuccess(this.status);
+}
+
+class UpdateLastCallDateLoading extends DebtState {}
+
+class UpdateLastCallDateFailure extends DebtState {
+  final Failure failure;
+
+  UpdateLastCallDateFailure(this.failure);
+}
+
+class UpdateLastCallDateSuccess extends DebtState {
+  final bool status;
+
+  UpdateLastCallDateSuccess(this.status);
+}
+
+class DeleteDebtLoading extends DebtState {}
+
+class DeleteDebtFailure extends DebtState {
+  final Failure failure;
+
+  DeleteDebtFailure(this.failure);
+}
+
+class DeleteDebtSuccess extends DebtState {
+  final bool status;
+
+  DeleteDebtSuccess(this.status);
+}

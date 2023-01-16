@@ -4,6 +4,7 @@ import 'package:dukka_finance/core/network_info/network_info.dart';
 import 'package:dukka_finance/core/runner/service.dart';
 import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/auth/data/models/auth_signin.dart';
+import 'package:dukka_finance/features/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,10 +27,12 @@ final authRepoProvider = Provider<AuthRepository>(
 class AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final NetworkInfo _networkInfo;
+  final AppDataBase dataBase;
 
   AuthRepository(Ref ref)
       : _firebaseAuth = ref.read(_firebaseAuthProvider),
-        _networkInfo = ref.read(networkInfoProvider);
+        _networkInfo = ref.read(networkInfoProvider),
+        dataBase = ref.read(appDatabaseProvider);
 
   Future<Either<Failure, AppUser>> createUserWithEmailAndPassword(
       AuthSignUp data) async {
@@ -44,7 +47,11 @@ class AuthRepository {
             .then((value) async {
           await _firebaseAuth.currentUser?.updateDisplayName(data.fullName);
           return value;
-        }).then((value) => AppUser.fromFirebaseUser(value.user!)),
+        }).then((value) {
+          final user = AppUser.fromFirebaseUser(value.user!);
+          dataBase.createDashBoard(user);
+          return user;
+        }),
         errorTitle: 'SignUp Failure');
   }
 

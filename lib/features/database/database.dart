@@ -46,7 +46,11 @@ class AppDataBase {
 
   Future<bool> addTransaction(AppUser user, Activity activity) async {
     //add the transaction and update dashboard data
+
     final dashDocRef = ref.doc(FirestorePath.dashboardData(user.uid));
+    if ((await dashDocRef.get()) == null) {
+      createDashBoard(user);
+    }
     final activityCollection =
         ref.collection(FirestorePath.transactionData(user.uid));
     return ref.runTransaction((transaction) async {

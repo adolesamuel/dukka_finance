@@ -17,3 +17,17 @@ class CreateDebtSuccess extends DebtState {
 
   CreateDebtSuccess(this.status);
 }
+
+class DebtListLoading extends DebtState {}
+
+class DebtListFailure extends DebtState {
+  final Failure failure;
+
+  DebtListFailure(this.failure);
+}
+
+class DebtListSuccess extends DebtState {
+  final List<Debt> listOfDebts;
+
+  DebtListSuccess(this.listOfDebts);
+}

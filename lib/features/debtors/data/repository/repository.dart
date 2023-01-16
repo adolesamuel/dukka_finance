@@ -12,6 +12,7 @@ final debtorsRepositoryProvider =
 
 abstract class DebtorsRepository {
   Future<Either<Failure, bool>> addItem(Debt t, AppUser user);
+  Stream<Either<Failure, List<Debt>>> streamDebts(AppUser user);
 }
 
 class DebtorsRepositoryImpl implements DebtorsRepository {
@@ -39,16 +40,19 @@ class DebtorsRepositoryImpl implements DebtorsRepository {
   //           throw Left(CommonFailure('Delete Error', error.toString())));
   // }
 
-  // @override
-  // Stream<Either<Failure, List<Debt>>> getStream() async* {
-  //   final data = ref.snapshots();
-  //   yield* data.map((snapshot) {
-  //     final result = snapshot.docs.map((e) => Debt.fromJson(e.data())).toList();
-
-  //     return Right<Failure, List<Debt>>(result);
-  //   }).handleError((error, stack) =>
-  //       throw Left(CommonFailure('Error Stream', error.toString())));
-  // }
+  @override
+  Stream<Either<Failure, List<Debt>>> streamDebts(AppUser user) async* {
+    yield* dataBase.streamDebtData(user).map((event) {
+      if (event == null) {
+        //Empty list
+        return const Right<Failure, List<Debt>>(<Debt>[]);
+      }
+      return Right<Failure, List<Debt>>(
+          event.map((e) => Debt.fromJson(e)).toList());
+    }).handleError((error, stack) {
+      return Left(CommonFailure('Error', error.toString()));
+    });
+  }
 
   // @override
   // Future<Either<Failure, bool>> updateItem(Debt t) {

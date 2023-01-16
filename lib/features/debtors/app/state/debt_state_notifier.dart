@@ -1,4 +1,5 @@
 import 'package:dukka_finance/core/failures/failure.dart';
+import 'package:dukka_finance/features/auth/data/models/app_user.dart';
 import 'package:dukka_finance/features/debtors/data/repository/repository.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:dukka_finance/features/services/app_user_manager.dart';
@@ -24,5 +25,17 @@ class DebtNotifier extends StateNotifier<DebtState> {
 
     state = addDebtOrError.fold(
         (l) => CreateDebtFailure(l), (r) => CreateDebtSuccess(r));
+  }
+
+  Stream<DebtState> streamDebt() async* {
+    yield DebtListLoading();
+    AppUser user = AppUserManager.user;
+
+    yield* _debtorsRepository.streamDebts(user).map((event) {
+      return event.fold(
+        (l) => DebtListFailure(l),
+        (r) => DebtListSuccess(r),
+      );
+    });
   }
 }

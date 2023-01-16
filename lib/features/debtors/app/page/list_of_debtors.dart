@@ -1,21 +1,21 @@
-import 'package:dukka_finance/features/auth/app/state/auth_state_notifier.dart';
-import 'package:dukka_finance/features/common/button_widget.dart';
+import 'package:dukka_finance/features/common/app_snackbar.dart';
 import 'package:dukka_finance/features/debtors/app/page/debtors_list_tile.dart';
+import 'package:dukka_finance/features/debtors/app/state/debt_state_notifier.dart';
 import 'package:dukka_finance/features/debtors/models/debt.dart';
 import 'package:dukka_finance/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DebtorListPage extends StatefulWidget {
+class DebtorListPage extends ConsumerStatefulWidget {
   static const route = ScreenPaths.debtorsListScreen;
   const DebtorListPage({super.key});
 
   @override
-  State<DebtorListPage> createState() => _DebtorListPageState();
+  ConsumerState<DebtorListPage> createState() => _DebtorListPageState();
 }
 
-class _DebtorListPageState extends State<DebtorListPage> {
+class _DebtorListPageState extends ConsumerState<DebtorListPage> {
   final spacer = SizedBox(height: 5.0.h);
 
   @override
@@ -29,41 +29,49 @@ class _DebtorListPageState extends State<DebtorListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final debt = Debt(
-        id: DateTime.now().toIso8601String(),
-        amount: 50000,
-        description: 'borrowed',
-        receiver: 'Sam',
-        sender: 'Jeff',
-        date: DateTime(2023, 1, 1),
-        dueDate: DateTime(2023, 1, 2),
-        isPaid: false);
+    return StreamBuilder<DebtState>(
+        stream: ref.watch(debtStateProvider.notifier).streamDebt(),
+        builder: (context, snapshot) {
+          final state = snapshot.data;
 
-    return Scaffold(
-      body: Center(
-        child: SizedBox.expand(
-          child: Column(
-            children: [
-              const Text('Total Debts'),
-              spacer,
-              const Text(
-                'N30,000,',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+          List<Debt> debtData = [];
+          if (state is DebtListSuccess) {
+            debtData = state.listOfDebts;
+          } else if (state is DebtListFailure) {
+            AppSnackbar(
+              context,
+              text: state.failure.message,
+              isError: true,
+            ).show();
+          }
+
+          return Scaffold(
+            body: Center(
+              child: SizedBox.expand(
+                child: Column(
+                  children: [
+                    const Text('Total Debts'),
+                    spacer,
+                    const Text(
+                      'N30,000,',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    spacer,
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: debtData.length,
+                        itemBuilder: (context, index) =>
+                            DebtorsListTile(debt: debtData[index]),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              spacer,
-              Expanded(
-                child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) =>
-                        DebtorsListTile(debt: debt)),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 }

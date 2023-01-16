@@ -78,4 +78,11 @@ class AppDataBase {
 
     return true;
   }
+
+  Stream<List<Map<String, dynamic>>?> streamDebtData(AppUser user) async* {
+    yield* ref
+        .collection(FirestorePath.debtorsData(user.uid))
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((item) => item.data()).toList());
+  }
 }

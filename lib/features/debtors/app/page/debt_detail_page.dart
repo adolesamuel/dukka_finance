@@ -119,7 +119,7 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      debt.isPaid ? 'Paid' : 'Borrowed',
+                      debt.isPaid ? 'Debt Settled' : 'Borrowed',
                       style:
                           const TextStyle(fontSize: 30.0, color: Colors.black),
                     ),
@@ -144,50 +144,57 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                     ],
                   ),
                   space,
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      'Due Date',
-                      style: TextStyle(fontSize: 30.0, color: Colors.black),
-                    ),
-                  ),
-                  Text(
-                    format.format(debt.dueDate),
-                    style: const TextStyle(
-                        fontSize: 30.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w300),
-                  ),
-                  space,
-
-                  if (debt.lastContactDate != null)
+                  if (!debt.isPaid)
                     Column(
                       children: [
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
-                            'Last Contacted',
+                            'Due Date',
                             style:
-                                TextStyle(fontSize: 20.0, color: Colors.black),
+                                TextStyle(fontSize: 30.0, color: Colors.black),
                           ),
                         ),
                         Text(
-                          format.format(debt.lastContactDate!),
+                          format.format(debt.dueDate),
                           style: const TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 30.0,
                               color: Colors.black,
                               fontWeight: FontWeight.w300),
                         ),
                       ],
-                    )
-                  else
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        "You haven't sent a reminder",
-                        style: TextStyle(fontSize: 20.0, color: Colors.black),
-                      ),
                     ),
+                  space,
+
+                  if (!debt.isPaid)
+                    if (debt.lastContactDate != null)
+                      Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              'Last Contacted',
+                              style: TextStyle(
+                                  fontSize: 20.0, color: Colors.black),
+                            ),
+                          ),
+                          Text(
+                            format.format(debt.lastContactDate!),
+                            style: const TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      )
+                    else
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          "You haven't sent a reminder",
+                          style: TextStyle(fontSize: 20.0, color: Colors.black),
+                        ),
+                      ),
 
                   space,
 

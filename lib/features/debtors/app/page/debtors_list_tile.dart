@@ -80,21 +80,22 @@ class DebtorsListTile extends StatelessWidget {
                       fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
               ),
-              if (fraction >= 1)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.error,
-                      color: Colors.red,
+              if (!debt.isPaid)
+                if (fraction >= 1)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                ),
             ],
           ),
         ),

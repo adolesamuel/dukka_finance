@@ -95,6 +95,7 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                   ),
                   //Receiver/Sender.
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         padding: const EdgeInsets.all(20.0),
@@ -118,15 +119,17 @@ class _DebtDetailPageState extends ConsumerState<DebtDetailPage> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: 250.0.w,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            DebtGlowIcon(
-                              debt: debt,
-                            ),
-                          ],
+                      Padding(
+                        padding: const EdgeInsets.only(right: 30.0),
+                        child: SizedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              DebtGlowIcon(
+                                debt: debt,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

@@ -37,7 +37,8 @@ class _DashboardContentState extends ConsumerState<DashboardContent>
         builder: (context, snapshot) {
           final transactionState = snapshot.data;
           if (transactionState is TransactionDataLoading) {
-            return const LoadingWidget();
+            return const SizedBox(
+                height: 50, width: 50, child: LoadingWidget());
           } else if (transactionState is TransactionData) {
             final dataList = transactionState.activity;
 

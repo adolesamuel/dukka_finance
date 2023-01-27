@@ -21,7 +21,7 @@ class TransactionListTile extends StatelessWidget {
         side: const BorderSide(
           color: Colors.grey,
           width: 0.2,
-          strokeAlign: StrokeAlign.outside,
+          strokeAlign: BorderSide.strokeAlignOutside,
         ),
       ),
       child: ListTile(
